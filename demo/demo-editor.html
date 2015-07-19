@@ -1,0 +1,89 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+Authored by Maxime Perrimond <max.perrimond@gmail.com>
+-->
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="demo-panel.html">
+<link rel="import" href="../magnet-editor.html">
+
+<dom-module id="demo-editor">
+
+    <style>
+        :host {
+            display: flex;
+            flex: 1;
+        }
+    </style>
+
+    <template>
+        <content></content>
+    </template>
+
+    <script>
+        Polymer({
+            is: "demo-editor",
+
+            properties: {
+                config: {
+                    type: Object,
+                    value: {
+                        type: "dock",
+                        options: {horizontal: true},
+                        sub: [
+                            {
+                                type: "dock",
+                                sub: [
+                                    {
+                                        type: "block",
+                                        sub: [
+                                            {
+                                                type: "panel",
+                                                options: {panel: "DemoPanel"}
+                                            },
+                                            {
+                                                type: "panel",
+                                                options: {panel: "DemoPanel"}
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        type: "block",
+                                        sub: [
+                                            {
+                                                type: "panel",
+                                                options: {panel: "DemoPanel"}
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                type: "block",
+                                options: {selected: 1},
+                                sub: [
+                                    {
+                                        type: "panel",
+                                        options: {panel: "DemoPanel"}
+                                    },
+                                    {
+                                        type: "panel",
+                                        options: {panel: "DemoPanel"}
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+
+            ready: function () {
+                var editor = new MagnetEditor();
+                Polymer.dom(this).appendChild(editor);
+                editor.editor = this.config;
+                editor.load();
+                editor.flush();
+            }
+        });
+    </script>
+
+</dom-module>

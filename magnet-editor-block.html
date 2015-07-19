@@ -1,0 +1,137 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+Authored by Maxime Perrimond <max.perrimond@gmail.com>
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="magnet-editor-tabs.html">
+<link rel="import" href="magnet-editor-pages.html">
+
+<dom-module id="magnet-editor-block">
+
+    <style>
+        :host {
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            flex: 1;
+            flex-wrap: nowrap;
+            align-items: stretch;
+            flex-direction: column;
+
+            min-width: 100px;
+            min-height: 100px;
+
+            border: solid #000 1px;
+
+            @apply(--magnet-grid-block);
+        }
+    </style>
+
+    <template>
+        <magnet-editor-tabs id="tabs" selected="{{selected}}"></magnet-editor-tabs>
+        <magnet-editor-pages id="panels" selected="{{selected}}"></magnet-editor-pages>
+    </template>
+
+    <script>
+        MagnetEditorBlock = Polymer({
+            is: "magnet-editor-block",
+
+            properties: {
+                selected: {
+                    type: String,
+                    notify: true,
+                    value: "0"
+                },
+
+                checked: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+
+            addPanel: function (panel) {
+                this._getTabs().addTab(panel.name);
+
+                Polymer.dom(this._getPanels()).appendChild(panel);
+                Polymer.dom.flush();
+            },
+
+            removePanel: function (panel) {
+                var p;
+                if (p = Polymer.dom(this._getPanels).querySelector(panel.is) === undefined) {
+                    return;
+                }
+                Polymer.dom(this._getPanels).removeChild(p);
+
+                panel._block = null;
+
+                Polymer.dom(this._getTabs).childNodes.every(function(child) {
+                    if (child.id === panel.name) {
+                        this.removeChild(child);
+                        return false;
+                    }
+                    return true;
+                });
+
+                Polymer.dom.flush();
+            },
+
+            select: function (tab) {
+                this._getTabs().select(tab);
+            },
+
+            _getTabs: function () {
+                return this.$.tabs;
+            },
+
+            _getPanels: function () {
+                return this.$.panels;
+            },
+
+            flush: function () {
+                Polymer.dom.flush();
+            },
+
+            notifyResize: function (value, from) {
+                if (((from === "top" || from === "bottom") && this.getHeight() + value < 100) ||
+                        ((from === "right" || from === "left") && this.getWidth() + value < 100)) {
+                    return false;
+                }
+                this.checked = true;
+                return true;
+            },
+
+            resize: function (value, from) {
+                if (!this.checked) {
+                    return;
+                }
+                this.checked = false;
+                this.setHeight(this.getHeight());
+                this.setWidth(this.getWidth());
+                this.style["flex"] = "none";
+                if (from === "right" || from === "left") {
+                    this.setWidth(this.getWidth() + value);
+                } else if (from === "top" || from === "bottom") {
+                    this.setHeight(this.getHeight() + value);
+                }
+            },
+
+            getWidth: function () {
+                return parseFloat(getComputedStyle(this)["width"]);
+            },
+
+            getHeight: function () {
+                return parseFloat(getComputedStyle(this)["height"]);
+            },
+
+            setWidth: function(width) {
+                this.style["width"] = width + "px";
+            },
+
+            setHeight: function(height) {
+                this.style["height"] = height + "px";
+            }
+        });
+    </script>
+
+</dom-module>

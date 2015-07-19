@@ -1,0 +1,147 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+Authored by Maxime Perrimond <max.perrimond@gmail.com>
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="magnet-editor-dock.html">
+<link rel="import" href="magnet-editor-block.html">
+
+<dom-module id="magnet-editor">
+
+    <style>
+        :host {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+
+            user-select: none;
+            -webkit-user-select: none;
+
+            padding: 5px;
+            color: #DDD;
+            font-family: "Varela Round", sans-serif;
+            background: #555;
+
+            @apply(--magnet-editor);
+        }
+    </style>
+
+    <template>
+        <content></content>
+    </template>
+
+    <script>
+        MagnetEditor = Polymer({
+            is: "magnet-editor",
+
+            properties: {
+                docks: {
+                    type: Array,
+                    value: []
+                },
+
+                blocks: {
+                    type: Array,
+                    value: []
+                },
+
+                panels: {
+                    type: Array,
+                    value: []
+                },
+
+                editor: {
+                    type: Object,
+                    notify: true
+                }
+            },
+
+            factoryImpl: function (editor) {
+                this.editor = editor;
+            },
+
+            reload: function () {
+                this.load();
+            },
+
+            load: function () {
+                Polymer.dom(this).appendChild(this._createElement(this.editor));
+                this.flush();
+            },
+
+            _createElement: function (element) {
+                switch (element.type) {
+                    case "dock":
+                        return this.createDock(element);
+                    case "block":
+                        return this.createBlock(element);
+                }
+            },
+
+            _deleteElement: function (element) {
+                Polymer.dom(Polymer.dom(element).parentNode).removeChild(element);
+            },
+
+            createDock: function (element) {
+                var dock = new MagnetEditorDock();
+                if (element.options !== undefined && element.options.horizontal) {dock.horizontal = true;}
+                for (var i = 0; i < element.sub.length; i++) {
+                    dock.addElement(this._createElement(element.sub[i], dock));
+                }
+                this.docks.push(dock);
+                return dock;
+            },
+
+            removeDock: function (dock) {
+                if (this.docks.contains(dock)) {
+                    this._deleteElement(dock);
+                }
+            },
+
+            createBlock: function (element) {
+                var block = new MagnetEditorBlock();
+                for (var i = 0; i < element.sub.length; i++) {
+                    block.addPanel(this.createPanel(element.sub[i]));
+                }
+                if (element.options !== undefined && element.options.selected !== undefined) {
+                    block.select(element.options.selected);
+                } else {
+                    block.select(0);
+                }
+                this.blocks.push(block);
+                return block;
+            },
+
+            removeBlock: function (block) {
+                if (this.blocks.contains(block)) {
+                    this._deleteElement(block);
+                }
+            },
+
+            createPanel: function (element) {
+                var panel = new window[element.options.panel];
+                this.panels.push(panel);
+                return panel;
+            },
+
+            removePanel: function (panel) {
+                if (this.panels.contains(panel)) {
+                    this._deleteElement(panel);
+                }
+            },
+
+            flush: function () {
+                Polymer.dom.flush();
+            },
+
+            clear: function () {
+                Polymer.dom(this).childNodes.forEach(function (e) {
+                    Polymer.dom(this).removeChild(e);
+                });
+                this.flush();
+            }
+        });
+    </script>
+</dom-module>

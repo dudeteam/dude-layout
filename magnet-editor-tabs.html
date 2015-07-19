@@ -1,0 +1,132 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+Authored by Maxime Perrimond <max.perrimond@gmail.com>
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="magnet-editor-tab.html">
+
+<dom-module id="magnet-editor-tabs">
+
+    <style>
+        :host {
+            display: flex;
+            flex-direction: row;
+            height: 22px;
+
+            font-size: 14px;
+            font-weight: 500;
+            overflow: hidden;
+            white-space: nowrap;
+
+            -webkit-user-select: none;
+            user-select: none;
+
+            background: #444;
+
+            @apply(--magnet-grid-tabs);
+        }
+    </style>
+
+    <template>
+        <content></content>
+    </template>
+
+    <script>
+        MagnetEditorTabs = Polymer({
+            is: "magnet-editor-tabs",
+
+            properties: {
+                selected: {
+                    type: String,
+                    notify: true
+                },
+
+                activeTab: {
+                    type: Object,
+                    value: null
+                }
+            },
+
+            listeners: {
+                'tab-click': '_onTabClick'
+            },
+
+            hostAttributes: {
+                role: 'tablist'
+            },
+
+            ready: function () {
+                if (this._getTabs().length > 0) {
+                    this.select(this._getTabs()[0]);
+                }
+            },
+
+            select: function (tab) {
+                if (!(tab instanceof MagnetEditorTab)) {
+                    if (typeof tab === "number" && tab < this._getTabs().length) {
+                        tab = this._getTabs()[tab];
+                    } else if (typeof tab === "string") {
+                        if (this._getTabs().every(function (t) {
+                                    if (t.name === tab) {
+                                        tab = t;
+                                        return false;
+                                    }
+                                    return true;
+                                })) {
+                            tab = null;
+                        }
+                    } else {
+                        tab = null;
+                    }
+                }
+
+                if (tab !== null) {
+                    if (tab !== this.activeTab) {
+                        if (this.activeTab !== null ) {
+                            this.activeTab.classList.remove("active");
+                        }
+                        this.activeTab = tab;
+                        this.activeTab.classList.add("active");
+
+                        this.selected = tab.name;
+                    }
+                }
+            },
+
+            addTab: function (name) {
+                Polymer.dom(this).appendChild(new MagnetEditorTab(name));
+            },
+
+            addTabBefore: function (name, before) {
+                if (Polymer.dom(before).parentNode === this) {
+                    Polymer.dom(this).insertBefore(new MagnetEditorTab(name), before);
+                }
+            },
+
+            moveTab: function (tab, before) {
+                this.removeTab(tab);
+                this.addTabBefore(tab.name, before);
+            },
+
+            removeTab: function (tab) {
+                if (Polymer.dom(tab).parentNode === this) {
+                    Polymer.dom(this).removeChild(tab);
+                }
+            },
+
+            _onTabClick: function (event) {
+                event.stopPropagation();
+                this.select(event.target);
+            },
+
+            _getTabs: function () {
+                return Polymer.dom(this).childNodes;
+            },
+
+            flush: function () {
+                Polymer.dom.flush();
+            }
+        });
+    </script>
+
+</dom-module>

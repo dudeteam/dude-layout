@@ -1,0 +1,72 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+Authored by Maxime Perrimond <max.perrimond@gmail.com>
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="magnet-editor-pages">
+
+    <style>
+        :host {
+            position: relative;
+            display: block;
+            flex: 1;
+
+            background-color: #333333;
+        }
+
+        :host > ::content > :not(.active) {
+            display: none !important;
+        }
+    </style>
+
+    <template>
+        <content></content>
+    </template>
+
+    <script>
+        MagnetEditorPages = Polymer({
+            is: "magnet-editor-pages",
+
+            properties: {
+                selected: {
+                    type: String,
+                    observer: "_selectedChanged"
+                },
+
+                activePage: {
+                    type: Object,
+                    value: null
+                }
+            },
+
+            _selectedChanged: function (selected) {
+                if (typeof selected === "number") {
+                    if (this._getPages().length > selected) {
+                        this._activatePage(this._getPages()[selected]);
+                    }
+                } else if (typeof selected === "string") {
+                    for (var i = 0; i < this._getPages().length; i++) {
+                        if (this._getPages()[i].name === selected) {
+                            this._activatePage(this._getPages()[i]);
+                            return;
+                        }
+                    }
+                }
+            },
+
+            _activatePage: function (page) {
+                if (this.activePage !== null) {
+                    this.activePage.classList.remove("active");
+                }
+                this.activePage = page;
+                this.activePage.classList.add("active");
+            },
+
+            _getPages: function () {
+                return Polymer.dom(this).childNodes;
+            }
+        });
+    </script>
+
+</dom-module>

@@ -1,0 +1,71 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+Authored by Maxime Perrimond <max.perrimond@gmail.com>
+-->
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="magnet-editor-tab">
+
+    <style>
+        :host {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: stretch;
+
+            height: 22px;
+            padding: 0 12px;
+
+            overflow: hidden;
+            cursor: pointer;
+
+            @apply(--magnet-grid-tab);
+        }
+
+        :host(.active) {
+            background: #555;
+            padding-bottom: 1px;
+
+            @apply(--magnet-grid-tab-active);
+        }
+
+        :host(:focus) {
+            outline: none;
+            @apply(--magnet-grid-tab-focus);
+        }
+    </style>
+
+    <template>
+        <a>{{name}}</a>
+    </template>
+
+    <script>
+        MagnetEditorTab = Polymer({
+            is: "magnet-editor-tab",
+
+            properties: {
+                name: {
+                    type: String
+                }
+            },
+
+            listeners: {
+                "click": "_onClick"
+            },
+
+            hostAttributes: {
+                role: 'tab'
+            },
+
+            factoryImpl: function (name) {
+                this.name = name;
+            },
+
+            _onClick: function (event) {
+                event.stopPropagation();
+                this.fire("tab-click", {});
+            }
+        });
+    </script>
+
+</dom-module>
