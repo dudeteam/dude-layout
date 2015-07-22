@@ -86,7 +86,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 
             createDock: function (element) {
                 var dock = new MagnetEditorDock();
-                if (element.options !== undefined && element.options.horizontal) {dock.horizontal = true;}
+                if (element.horizontal !== undefined) {dock.horizontal = element.horizontal;}
                 for (var i = 0; i < element.sub.length; i++) {
                     dock.addElement(this._createElement(element.sub[i], dock));
                 }
@@ -103,10 +103,10 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             createBlock: function (element) {
                 var block = new MagnetEditorBlock();
                 for (var i = 0; i < element.sub.length; i++) {
-                    block.addPanel(this.createPanel(element.sub[i]));
+                    block.addPanel(element.sub[i].title, this.createPanel(element.sub[i]));
                 }
-                if (element.options !== undefined && element.options.selected !== undefined) {
-                    block.select(element.options.selected);
+                if (element.selected !== undefined) {
+                    block.select(element.selected);
                 } else {
                     block.select(0);
                 }
@@ -121,7 +121,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             createPanel: function (element) {
-                var panel = new window[element.options.panel];
+                var panel = new window[element.panel];
                 this.panels.push(panel);
                 return panel;
             },

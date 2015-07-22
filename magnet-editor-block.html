@@ -49,8 +49,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 }
             },
 
-            addPanel: function (panel) {
-                this._getTabs().addTab(panel.name);
+            addPanel: function (title, panel) {
+                this._getTabs().addTab(title);
 
                 Polymer.dom(this._getPanels()).appendChild(panel);
                 Polymer.dom.flush();
