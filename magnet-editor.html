@@ -46,7 +46,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 },
 
                 panels: {
-                    type: Object
+                    type: Array
                 },
 
                 config: {
@@ -120,7 +120,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             createPanel: function (element) {
                 var panel = new window[element.panel];
                 panel.name = element.title;
-                this.panels[element.title] = panel;
+                this.panels.push(panel);
                 return panel;
             },
 
