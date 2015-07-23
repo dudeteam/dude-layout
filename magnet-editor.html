@@ -38,28 +38,25 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 
             properties: {
                 docks: {
-                    type: Array,
-                    value: []
+                    type: Array
                 },
 
                 blocks: {
-                    type: Array,
-                    value: []
+                    type: Array
                 },
 
                 panels: {
-                    type: Array,
-                    value: []
+                    type: Object
                 },
 
-                editor: {
+                config: {
                     type: Object,
                     notify: true
                 }
             },
 
             factoryImpl: function (editor) {
-                this.editor = editor;
+                this.config = editor;
             },
 
             reload: function () {
@@ -67,7 +64,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             load: function () {
-                Polymer.dom(this).appendChild(this._createElement(this.editor));
+                Polymer.dom(this).appendChild(this._createElement(this.config));
                 this.flush();
             },
 
@@ -88,7 +85,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 var dock = new MagnetEditorDock();
                 if (element.horizontal !== undefined) {dock.horizontal = element.horizontal;}
                 for (var i = 0; i < element.sub.length; i++) {
-                    dock.addElement(this._createElement(element.sub[i], dock));
+                    dock.addElement(this._createElement(element.sub[i]));
                 }
                 this.docks.push(dock);
                 return dock;
@@ -122,7 +119,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 
             createPanel: function (element) {
                 var panel = new window[element.panel];
-                this.panels.push(panel);
+                panel.name = element.title;
+                this.panels[element.title] = panel;
                 return panel;
             },
 

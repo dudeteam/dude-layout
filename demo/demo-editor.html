@@ -79,7 +79,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             ready: function () {
                 var editor = new MagnetEditor();
                 Polymer.dom(this).appendChild(editor);
-                editor.editor = this.config;
+                editor.config = this.config;
                 editor.load();
                 editor.flush();
             }
