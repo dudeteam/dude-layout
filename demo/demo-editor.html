@@ -28,7 +28,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                     type: Object,
                     value: {
                         type: "dock",
-                        options: {horizontal: true},
+                        horizontal: true,
                         sub: [
                             {
                                 type: "dock",
@@ -38,11 +38,13 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                                         sub: [
                                             {
                                                 type: "panel",
-                                                options: {panel: "DemoPanel"}
+                                                title: "Panel 1",
+                                                panel: "DemoPanel"
                                             },
                                             {
                                                 type: "panel",
-                                                options: {panel: "DemoPanel"}
+                                                title: "Panel 2",
+                                                panel: "DemoPanel"
                                             }
                                         ]
                                     },
@@ -51,7 +53,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                                         sub: [
                                             {
                                                 type: "panel",
-                                                options: {panel: "DemoPanel"}
+                                                title: "Panel 3",
+                                                panel: "DemoPanel"
                                             }
                                         ]
                                     }
@@ -59,15 +62,17 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                             },
                             {
                                 type: "block",
-                                options: {selected: 1},
+                                selected: 1,
                                 sub: [
                                     {
                                         type: "panel",
-                                        options: {panel: "DemoPanel"}
+                                        title: "Panel 4",
+                                        panel: "DemoPanel"
                                     },
                                     {
                                         type: "panel",
-                                        options: {panel: "DemoPanel"}
+                                        title: "Panel 5",
+                                        panel: "DemoPanel"
                                     }
                                 ]
                             }
