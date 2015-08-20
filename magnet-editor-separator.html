@@ -9,11 +9,10 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
     <style>
         :host {
             display: flex;
-            flex: 0 0 var(--separator-size);
+            flex: 0 0 var(--magnet-editor-separator-size);
             white-space: nowrap;
             z-index: 2;
             width: auto;
-            margin: -2px 0;
             cursor: row-resize;
 
             @apply(--magnet-editor-separator);
@@ -21,21 +20,15 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 
         :host([horizontal]) {
             height: auto;
-            margin: 0 -2px;
             cursor: col-resize;
 
             @apply(--magnet-editor-separator-h);
         }
 
-        :host([thin] :not([horizontal])) {
-            flex: 0 0 5px;
-            height: 5px;
+        :host([thin]) {
+            flex: 0 0 var(--magnet-editor-thin-separator-size);
         }
 
-        :host([thin] [horizontal]) {
-            flex: 0 0 5px;
-            width: 5px;
-        }
     </style>
 
     <template>

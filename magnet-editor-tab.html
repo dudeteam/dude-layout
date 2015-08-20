@@ -17,14 +17,15 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 
             overflow: hidden;
             cursor: pointer;
+            color: var(--text-color);
 
             @apply(--magnet-grid-tab);
         }
 
         :host(.active) {
-            background: var(--magnet-page-background);
-            padding-bottom: 1px;
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            color: var(--title-color);
+            background: var(--magnet-editor-panel-background);
+            border-radius: var(--magnet-editor-border-radius) var(--magnet-editor-border-radius) 0 0;
 
             @apply(--magnet-grid-tab-active);
         }
