@@ -13,8 +13,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             flex-wrap: nowrap;
             align-items: stretch;
 
-            height: 22px;
-            padding: 0 12px;
+            padding: 6px 12px;
 
             overflow: hidden;
             cursor: pointer;
@@ -23,8 +22,9 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
         }
 
         :host(.active) {
-            background: #555;
+            background: var(--magnet-page-background);
             padding-bottom: 1px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
 
             @apply(--magnet-grid-tab-active);
         }

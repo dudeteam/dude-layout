@@ -5,6 +5,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="magnet-editor-dock.html">
 <link rel="import" href="magnet-editor-block.html">
+<link rel="import" href="magnet-editor-style.html">
 
 <dom-module id="magnet-editor">
 
@@ -21,8 +22,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 
             padding: 5px;
             color: #DDD;
-            font-family: "Varela Round", sans-serif;
-            background: #555;
+            background: var(--magnet-editor-background);
 
             @apply(--magnet-editor);
         }
