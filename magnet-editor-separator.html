@@ -62,8 +62,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 var previousOrigin = (this.horizontal) ? "right" : "bottom";
                 var nextOrigin = (this.horizontal) ? "left" : "top";
 
-                if (this.previousElementSibling.notifyResize(value, previousOrigin) &&
-                        this.nextElementSibling.notifyResize(-value, nextOrigin)) {
+                if (this.previousElementSibling.isResizable(value, previousOrigin) &&
+                        this.nextElementSibling.isResizable(-value, nextOrigin)) {
                     this.previousElementSibling.resize(value, previousOrigin);
                     this.nextElementSibling.resize(-value, nextOrigin);
                 }

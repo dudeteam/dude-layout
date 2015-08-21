@@ -90,7 +90,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 Polymer.dom.flush();
             },
 
-            notifyResize: function (value, from) {
+            isResizable: function (value, from) {
                 if (((from === "top" || from === "bottom") && this.getHeight() + value < 100) ||
                         ((from === "right" || from === "left") && this.getWidth() + value < 100)) {
                     return false;
