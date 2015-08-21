@@ -1,0 +1,30 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+Authored by Maxime Perrimond <max.perrimond@gmail.com>
+-->
+<link rel="import" href="../../polymer/polymer.html">
+
+<dom-module id="demo-other-panel">
+    <style>
+        :host {
+            position: relative;
+            display: block;
+        }
+    </style>
+    <template>
+        <h3>Another demo panel</h3>
+        <input type="text">
+    </template>
+    <script>
+        DemoOtherPanel = Polymer({
+            is: "demo-other-panel",
+
+            properties: {
+                name: {
+                    type: String,
+                    value: "#Panel"
+                }
+            }
+        });
+    </script>
+</dom-module>

@@ -13,18 +13,19 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             flex-wrap: nowrap;
             align-items: stretch;
 
-            height: 22px;
-            padding: 0 12px;
+            padding: 6px 12px;
 
             overflow: hidden;
             cursor: pointer;
+            color: var(--text-color);
 
             @apply(--magnet-grid-tab);
         }
 
         :host(.active) {
-            background: #555;
-            padding-bottom: 1px;
+            color: var(--title-color);
+            background: var(--magnet-editor-panel-background);
+            border-radius: var(--magnet-editor-border-radius) var(--magnet-editor-border-radius) 0 0;
 
             @apply(--magnet-grid-tab-active);
         }

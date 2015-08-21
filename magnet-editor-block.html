@@ -18,10 +18,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             align-items: stretch;
             flex-direction: column;
 
-            min-width: 100px;
-            min-height: 100px;
-
-            border: solid #000 1px;
+            min-width: var(--magnet-editor-panel-min-width);
+            min-height: var(--magnet-editor-panel-min-height);
 
             @apply(--magnet-grid-block);
         }
@@ -92,7 +90,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 Polymer.dom.flush();
             },
 
-            notifyResize: function (value, from) {
+            isResizable: function (value, from) {
                 if (((from === "top" || from === "bottom") && this.getHeight() + value < 100) ||
                         ((from === "right" || from === "left") && this.getWidth() + value < 100)) {
                     return false;

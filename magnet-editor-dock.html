@@ -80,25 +80,31 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 }
             },
 
-            notifyResize: function (value, origin) {
+            /**
+             * Check whether the dock is resizable.
+             * @param value {Number} The resize delta in pixel
+             * @param origin {String} The direction from which the resize comes from
+             * @returns {*}
+             */
+            isResizable: function (value, origin) {
                 if (Polymer.dom(this).childNodes.length == 0) { return true; }
                 if (!this.horizontal) {
                     if (origin === "top") {
-                        return Polymer.dom(this).firstElementChild.notifyResize(value, origin);
+                        return Polymer.dom(this).firstElementChild.isResizable(value, origin);
                     } else if (origin === "bottom") {
-                        return Polymer.dom(this).lastElementChild.notifyResize(value, origin);
+                        return Polymer.dom(this).lastElementChild.isResizable(value, origin);
                     }
                 } else {
                     if (origin === "right") {
-                        return Polymer.dom(this).firstElementChild.notifyResize(value, origin);
+                        return Polymer.dom(this).firstElementChild.isResizable(value, origin);
                     } else if (origin === "left") {
-                        return Polymer.dom(this).lastElementChild.notifyResize(value, origin);
+                        return Polymer.dom(this).lastElementChild.isResizable(value, origin);
                     }
                 }
                 for (var i = 0; i < Polymer.dom(this).childNodes.length; i++) {
                     var child = Polymer.dom(this).childNodes[i];
                     if (!(child instanceof MagnetEditorSeparator)) {
-                        if (!child.notifyResize(value, origin)) {
+                        if (!child.isResizable(value, origin)) {
                             return false;
                         }
                     }
@@ -106,6 +112,12 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 return true;
             },
 
+            /**
+             * Performs the resize of the dock.
+             * @param value {Number} The resize delta in pixel
+             * @param origin {String} The direction from which the resize comes from
+             * @returns {*}
+             */
             resize: function (value, origin) {
                 if (Polymer.dom(this).childNodes.length == 0) { return; }
                 if (!this.horizontal) {
