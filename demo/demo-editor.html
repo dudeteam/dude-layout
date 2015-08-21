@@ -61,18 +61,33 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                                 ]
                             },
                             {
-                                type: "block",
-                                selected: 1,
+                                type: "dock",
                                 sub: [
                                     {
-                                        type: "panel",
-                                        title: "Panel 4",
-                                        panel: "DemoPanel"
+                                        type: "block",
+                                        sub: [
+                                            {
+                                                type: "panel",
+                                                title: "Panel 4",
+                                                panel: "DemoPanel"
+                                            }
+                                        ]
                                     },
                                     {
-                                        type: "panel",
-                                        title: "Panel 5",
-                                        panel: "DemoPanel"
+                                        type: "block",
+                                        selected: 1,
+                                        sub: [
+                                            {
+                                                type: "panel",
+                                                title: "Panel 5",
+                                                panel: "DemoPanel"
+                                            },
+                                            {
+                                                type: "panel",
+                                                title: "Panel 6",
+                                                panel: "DemoPanel"
+                                            }
+                                        ]
                                     }
                                 ]
                             }
