@@ -91,8 +91,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             isResizable: function (value, from) {
-                if (((from === "top" || from === "bottom") && this.getHeight() + value < 100) ||
-                        ((from === "right" || from === "left") && this.getWidth() + value < 100)) {
+                if (((from === "top" || from === "bottom") && this.getHeight() + value < 200) ||
+                        ((from === "right" || from === "left") && this.getWidth() + value < 200)) {
                     return false;
                 }
                 this.checked = true;

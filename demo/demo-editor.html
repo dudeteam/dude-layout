@@ -103,6 +103,15 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 editor.config = this.config;
                 editor.load();
                 editor.flush();
+                this._width = window.innerWidth;
+                this._height = window.innerHeight;
+                window.addEventListener("resize", function () {
+                    var deltaX = window.innerWidth - this._width;
+                    var deltaY = window.innerHeight - this._height;
+                    this._width = window.innerWidth;
+                    this._height = window.innerHeight;
+                    editor.resizeEditor(deltaX, deltaY);
+                }.bind(this));
             }
         });
     </script>

@@ -36,6 +36,10 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             is: "magnet-editor",
 
             properties: {
+                mainDock: {
+                    type: Object
+                },
+
                 docks: {
                     type: Array,
                     value: []
@@ -61,24 +65,11 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 this.config = editor;
             },
 
-            ready: function () {
-                this._currentWidth = window.innerWidth;
-                this._currentHeight = window.innerHeight;
-                // FIXME !!!
-                window.addEventListener("resize", function () {
-                    if (this.docks[0] !== undefined) {
-                        var deltaWidth = window.innerWidth - this._currentWidth;
-                        var deltaHeight = window.innerHeight - this._currentHeight;
-                        if (this.docks[0].isResizable(deltaWidth, deltaWidth > 0 ? "left" : "right")) {
-                            this.docks[0].resize(deltaWidth, deltaWidth > 0 ? "left" : "right");
-                        }
-                        if (this.docks[0].isResizable(deltaHeight, deltaHeight > 0 ? "top" : "bottom")) {
-                            this.docks[0].resize(deltaHeight, deltaHeight > 0 ? "top" : "bottom");
-                        }
-                        this._currentWidth = window.innerWidth;
-                        this._currentHeight = window.innerHeight;
-                    }
-                }.bind(this));
+            resizeEditor: function (deltaX, deltaY) {
+                if (this.mainDock.isResizable(deltaX, "right") && this.mainDock.isResizable(deltaY, "bottom")) {
+                    this.mainDock.resize(deltaX, "right");
+                    this.mainDock.resize(deltaX, "left");
+                }
             },
 
             reload: function () {
@@ -110,6 +101,9 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                     dock.addElement(this._createElement(element.sub[i]));
                 }
                 this.docks.push(dock);
+                if (this.mainDock == undefined) {
+                    this.mainDock = dock;
+                }
                 return dock;
             },
 
