@@ -1,0 +1,53 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+Authored by Maxime Perrimond <max.perrimond@gmail.com>
+-->
+<link rel="import" href="../../polymer/polymer.html">
+
+<dom-module id="demo-fruits">
+    <style>
+        :host {
+            @apply(--magnet-editor-panel-layout);
+        }
+        #header {
+            position: relative;
+            height: 40px;
+            background: indianred;
+        }
+        #wrapper {
+            overflow: auto;
+        }
+    </style>
+    <template>
+        <div id="header">
+            <input type="text" placeholder="Search fruits...">
+        </div>
+        <div id="wrapper" class="flex-1">
+            <div>Banana</div>
+            <div>Apple</div>
+            <div>Orange</div>
+            <div>Lemon</div>
+            <div>Lime</div>
+            <div>Pineapple</div>
+            <div>Kiwi</div>
+            <div>Mango</div>
+            <div>Coconut</div>
+            <div>Grape</div>
+            <div>Cherry</div>
+            <div>Strawberry</div>
+            <div>Raspberry</div>
+        </div>
+    </template>
+    <script>
+        DemoFruits = Polymer({
+            is: "demo-fruits",
+
+            properties: {
+                name: {
+                    type: String,
+                    value: "#Panel"
+                }
+            }
+        });
+    </script>
+</dom-module>

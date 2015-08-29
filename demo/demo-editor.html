@@ -4,7 +4,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="demo-panel.html">
-<link rel="import" href="demo-other-panel.html">
+<link rel="import" href="demo-fruits.html">
 <link rel="import" href="../magnet-editor.html">
 
 <dom-module id="demo-editor">
@@ -45,7 +45,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                                             {
                                                 type: "panel",
                                                 title: "Panel 2",
-                                                panel: "DemoOtherPanel"
+                                                panel: "DemoFruits"
                                             }
                                         ]
                                     },
@@ -62,33 +62,18 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                                 ]
                             },
                             {
-                                type: "dock",
+                                type: "block",
+                                selected: 1,
                                 sub: [
                                     {
-                                        type: "block",
-                                        sub: [
-                                            {
-                                                type: "panel",
-                                                title: "Panel 4",
-                                                panel: "DemoPanel"
-                                            }
-                                        ]
+                                        type: "panel",
+                                        title: "Panel 4",
+                                        panel: "DemoPanel"
                                     },
                                     {
-                                        type: "block",
-                                        selected: 1,
-                                        sub: [
-                                            {
-                                                type: "panel",
-                                                title: "Panel 5",
-                                                panel: "DemoPanel"
-                                            },
-                                            {
-                                                type: "panel",
-                                                title: "Panel 6",
-                                                panel: "DemoPanel"
-                                            }
-                                        ]
+                                        type: "panel",
+                                        title: "Panel 5",
+                                        panel: "DemoFruits"
                                     }
                                 ]
                             }
