@@ -12,17 +12,38 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
         #header {
             position: relative;
             height: 40px;
-            background: indianred;
+        }
+        #header input[type="text"] {
+            position: absolute;;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            font-size: 1em;
+            outline: none;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #666666;
+            color: #cccccc;
+        }
+        #header input[type="text"]:focus {
+            border-bottom: 1px solid indianred;
         }
         #wrapper {
             overflow: auto;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            bottom: 0;
+            left: 0;
         }
     </style>
     <template>
         <div id="header">
             <input type="text" placeholder="Search fruits...">
         </div>
-        <div id="wrapper" class="flex-1">
+        <div id="wrapper">
             <div>Banana</div>
             <div>Apple</div>
             <div>Orange</div>

@@ -36,15 +36,16 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                                 sub: [
                                     {
                                         type: "block",
+                                        "selected": 1,
                                         sub: [
                                             {
                                                 type: "panel",
-                                                title: "Panel 1",
+                                                title: "Scene editor",
                                                 panel: "DemoPanel"
                                             },
                                             {
                                                 type: "panel",
-                                                title: "Panel 2",
+                                                title: "Graph editor",
                                                 panel: "DemoFruits"
                                             }
                                         ]
@@ -54,7 +55,17 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                                         sub: [
                                             {
                                                 type: "panel",
-                                                title: "Panel 3",
+                                                title: "Debugger",
+                                                panel: "DemoPanel"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        type: "block",
+                                        sub: [
+                                            {
+                                                type: "panel",
+                                                title: "Console",
                                                 panel: "DemoPanel"
                                             }
                                         ]
@@ -62,18 +73,33 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                                 ]
                             },
                             {
-                                type: "block",
-                                selected: 1,
+                                type: "dock",
                                 sub: [
                                     {
-                                        type: "panel",
-                                        title: "Panel 4",
-                                        panel: "DemoPanel"
+                                        type: "block",
+                                        selected: 1,
+                                        sub: [
+                                            {
+                                                type: "panel",
+                                                title: "Inspector",
+                                                panel: "DemoPanel"
+                                            },
+                                            {
+                                                type: "panel",
+                                                title: "Entities",
+                                                panel: "DemoFruits"
+                                            }
+                                        ]
                                     },
                                     {
-                                        type: "panel",
-                                        title: "Panel 5",
-                                        panel: "DemoFruits"
+                                        type: "block",
+                                        sub: [
+                                            {
+                                                title: "Resources",
+                                                panel: "DemoPanel",
+                                                type: "panel"
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -92,7 +118,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 this._height = window.innerHeight;
                 window.addEventListener("resize", function () {
                     var deltaX = window.innerWidth - this._width;
-                    var deltaY = window.innerHeight - this._height;
+                    var deltaY = window.innerHeight - this._height; // take size in account?
                     this._width = window.innerWidth;
                     this._height = window.innerHeight;
                     editor.resizeEditor(deltaX, deltaY);
