@@ -5,6 +5,11 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 <link rel="import" href="magnet-editor-tabs.html">
 <link rel="import" href="magnet-editor-pages.html">
 
+<!--
+`magnet-editor-block`
+
+@element magnet-editor-block
+-->
 <dom-module id="magnet-editor-block">
 
     <style>
@@ -54,22 +59,19 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             },
 
             removePanel: function (panel) {
-                var p;
-                if (p = Polymer.dom(this._getPanels).querySelector(panel.is) === undefined) {
+                var p = Polymer.dom(this._getPanels).querySelector(panel.is);
+                if (p === undefined) {
                     return;
                 }
                 Polymer.dom(this._getPanels).removeChild(p);
-
                 panel._block = null;
-
-                Polymer.dom(this._getTabs).childNodes.every(function(child) {
+                Polymer.dom(this._getTabs).childNodes.every(function (child) {
                     if (child.id === panel.name) {
                         this.removeChild(child);
                         return false;
                     }
                     return true;
                 });
-
                 Polymer.dom.flush();
             },
 
@@ -90,8 +92,7 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             },
 
             isResizable: function (value, from) {
-                if (((from === "top" || from === "bottom") && this.getHeight() + value < 200) ||
-                        ((from === "right" || from === "left") && this.getWidth() + value < 200)) {
+                if (((from === "top" || from === "bottom") && this.getHeight() + value < 200) || ((from === "right" || from === "left") && this.getWidth() + value < 200)) {
                     return false;
                 }
                 this.checked = true;
@@ -103,8 +104,8 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                     return;
                 }
                 this.checked = false;
-                this.setHeight(this.getHeight());
                 this.setWidth(this.getWidth());
+                this.setHeight(this.getHeight());
                 this.style["flex"] = "none";
                 if (from === "right" || from === "left") {
                     this.setWidth(this.getWidth() + value);
@@ -121,11 +122,11 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 return parseFloat(getComputedStyle(this)["height"]);
             },
 
-            setWidth: function(width) {
+            setWidth: function (width) {
                 this.style["width"] = width + "px";
             },
 
-            setHeight: function(height) {
+            setHeight: function (height) {
                 this.style["height"] = height + "px";
             }
         });

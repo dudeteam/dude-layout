@@ -3,6 +3,11 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 -->
 <link rel="import" href="../polymer/polymer.html">
 
+<!--
+`magnet-editor-separator`
+
+@element magnet-editor-separator
+-->
 <dom-module id="magnet-editor-separator">
 
     <style>
@@ -52,23 +57,22 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             },
 
             listeners: {
-                track: 'track',
-                down: 'preventSelection'
+                track: "track",
+                down: "preventSelection"
             },
 
-            track: function(e) {
+            track: function (e) {
                 var value = e.detail[(this.horizontal) ? "ddx" : "ddy"];
                 var previousOrigin = (this.horizontal) ? "right" : "bottom";
                 var nextOrigin = (this.horizontal) ? "left" : "top";
 
-                if (this.previousElementSibling.isResizable(value, previousOrigin) &&
-                        this.nextElementSibling.isResizable(-value, nextOrigin)) {
+                if (this.previousElementSibling.isResizable(value, previousOrigin) && this.nextElementSibling.isResizable(-value, nextOrigin)) {
                     this.previousElementSibling.resize(value, previousOrigin);
                     this.nextElementSibling.resize(-value, nextOrigin);
                 }
             },
 
-            preventSelection: function(e) {
+            preventSelection: function (e) {
                 e.preventDefault();
             }
         });
