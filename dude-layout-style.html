@@ -1,4 +1,12 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+-->
 
+<!--
+`dude-layout-style`
+@group dude-layout
+@element dude-layout-style
+-->
 <style is="custom-style">
 
     :root {
@@ -8,15 +16,25 @@
         --disabled-text-color: #727272;
 
         /* Specify to the editor */
-        --dude-layout-background: #222;
-        --dude-layout-panel-background: #333;
+        --dude-layout-background: #222222;
+        --dude-layout-panel-background: #333333;
 
-        --dude-layout-border-radius: 5px;
+        --dude-layout-border-radius: 0;
         --dude-layout-separator-size: 8px;
         --dude-layout-separator-size: 5px;
 
         --dude-layout-panel-min-width: 100px;
         --dude-layout-panel-min-height: 100px;
+
+        --dude-layout-panel-layout: {
+             position: absolute;
+             top: 0;
+             right: 0;
+             bottom: 0;
+             left: 0;
+             margin: 5px;
+        };
+
     }
 
 </style>

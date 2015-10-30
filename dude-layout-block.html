@@ -1,11 +1,15 @@
 <!--
 Copyright (c) 2015 DudeTeam. All rights reserved.
-Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="dude-layout-tabs.html">
 <link rel="import" href="dude-layout-pages.html">
 
+<!--
+`dude-layout-block`
+@group dude-layout
+@element dude-layout-block
+-->
 <dom-module id="dude-layout-block">
 
     <style>
@@ -55,22 +59,19 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             removePanel: function (panel) {
-                var p;
-                if (p = Polymer.dom(this._getPanels).querySelector(panel.is) === undefined) {
+                var p = Polymer.dom(this._getPanels).querySelector(panel.is);
+                if (p === undefined) {
                     return;
                 }
                 Polymer.dom(this._getPanels).removeChild(p);
-
                 panel._block = null;
-
-                Polymer.dom(this._getTabs).childNodes.every(function(child) {
+                Polymer.dom(this._getTabs).childNodes.every(function (child) {
                     if (child.id === panel.name) {
                         this.removeChild(child);
                         return false;
                     }
                     return true;
                 });
-
                 Polymer.dom.flush();
             },
 
@@ -91,8 +92,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             isResizable: function (value, from) {
-                if (((from === "top" || from === "bottom") && this.getHeight() + value < 200) ||
-                        ((from === "right" || from === "left") && this.getWidth() + value < 200)) {
+                if (((from === "top" || from === "bottom") && this.getHeight() + value < 200) || ((from === "right" || from === "left") && this.getWidth() + value < 200)) {
                     return false;
                 }
                 this.checked = true;
@@ -104,8 +104,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                     return;
                 }
                 this.checked = false;
-                this.setHeight(this.getHeight());
                 this.setWidth(this.getWidth());
+                this.setHeight(this.getHeight());
                 this.style["flex"] = "none";
                 if (from === "right" || from === "left") {
                     this.setWidth(this.getWidth() + value);
@@ -122,11 +122,11 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 return parseFloat(getComputedStyle(this)["height"]);
             },
 
-            setWidth: function(width) {
+            setWidth: function (width) {
                 this.style["width"] = width + "px";
             },
 
-            setHeight: function(height) {
+            setHeight: function (height) {
                 this.style["height"] = height + "px";
             }
         });

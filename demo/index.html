@@ -1,8 +1,7 @@
-<!doctype html>
 <!--
 Copyright (c) 2015 DudeTeam. All rights reserved.
-Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
+<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -11,12 +10,35 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="demo-layout.html">
     <style>
+        @import url(https://fonts.googleapis.com/css?family=Josefin+Sans:400,700);
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            font-family: sans-serif;
+            font-family: Josefin Sans, sans-serif;
+            color: #aaaaaa;
+        }
+        /**
+         * Scrollbar
+         */
+        ::-webkit-scrollbar {
+            height: 5px;
+            width: 5px;
+        }
+        ::-webkit-scrollbar-thumb {
+            /*border-radius: 5px;*/
+            background: rgba(255,255,255,0.3);
+            background-clip: content-box;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+        ::-webkit-scrollbar-corner {
+            background-color: transparent;
+        }
+        ::-webkit-scrollbar-button {
+            display: none;
         }
     </style>
 </head>

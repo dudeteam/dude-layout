@@ -1,9 +1,13 @@
 <!--
 Copyright (c) 2015 DudeTeam. All rights reserved.
-Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../polymer/polymer.html">
 
+<!--
+`dude-layout-tab`
+@group dude-layout
+@element dude-layout-tab
+-->
 <dom-module id="dude-layout-tab">
 
     <style>
@@ -19,7 +23,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             cursor: pointer;
             color: var(--text-color);
 
-            @apply(--magnet-grid-tab);
+            @apply(--dude-layout-tab);
         }
 
         :host(.active) {
@@ -27,12 +31,12 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             background: var(--dude-layout-panel-background);
             border-radius: var(--dude-layout-border-radius) var(--dude-layout-border-radius) 0 0;
 
-            @apply(--magnet-grid-tab-active);
+            @apply(--dude-layout-tab-active);
         }
 
         :host(:focus) {
             outline: none;
-            @apply(--magnet-grid-tab-focus);
+            @apply(--dude-layout-tab-focus);
         }
     </style>
 
@@ -51,11 +55,11 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             listeners: {
-                "click": "_onClick"
+                click: "_onClick"
             },
 
             hostAttributes: {
-                role: 'tab'
+                role: "tab"
             },
 
             factoryImpl: function (name) {

@@ -1,10 +1,14 @@
 <!--
 Copyright (c) 2015 DudeTeam. All rights reserved.
-Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="dude-layout-separator.html">
 
+<!--
+`dude-layout-dock`
+@group dude-layout
+@element dude-layout-dock
+-->
 <dom-module id="dude-layout-dock">
 
     <style>
@@ -41,6 +45,9 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 }
             },
 
+            /**
+             *
+             */
             addElement: function (element) {
                 if (Polymer.dom(this).childNodes.length > 0) {
                     var separator = new DudeLayoutSeparator();
@@ -50,6 +57,9 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 Polymer.dom(this).appendChild(element);
             },
 
+            /**
+             *
+             */
             addElementBefore: function (element, before) {
                 var separator = new DudeLayoutSeparator();
                 separator.horizontal = this.horizontal;
@@ -58,6 +68,9 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 Polymer.dom(this).insertBefore(element, before);
             },
 
+            /**
+             *
+             */
             moveElement: function (element, before) {
                 this.removeElement(element);
                 if (before === undefined || Polymer.dom(before).parentNode !== this) {
@@ -67,6 +80,9 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 }
             },
 
+            /**
+             *
+             */
             removeElement: function (element) {
                 if (Polymer.dom(element).parentNode === this) {
                     if (Polymer.dom(element).previousSibling &&
@@ -81,10 +97,10 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             /**
-             * Check whether the dock is resizable.
+             * Returns whether the dock is resizable.
              * @param value {Number} The resize delta in pixel
              * @param origin {String} The direction from which the resize comes from
-             * @returns {*}
+             * @returns {Boolean}
              */
             isResizable: function (value, origin) {
                 if (Polymer.dom(this).childNodes.length == 0) { return true; }
@@ -119,18 +135,20 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
              * @returns {*}
              */
             resize: function (value, origin) {
-                if (Polymer.dom(this).childNodes.length == 0) { return; }
+                if (Polymer.dom(this).childNodes.length == 0 || isNaN(value)) {
+                    return;
+                }
                 if (!this.horizontal) {
                     if (origin === "top") {
-                        return Polymer.dom(this).firstElementChild.resize(value, origin);
+                        Polymer.dom(this).firstElementChild.resize(value, origin);
                     } else if (origin === "bottom") {
-                        return Polymer.dom(this).lastElementChild.resize(value, origin);
+                        Polymer.dom(this).lastElementChild.resize(value, origin);
                     }
                 } else {
                     if (origin === "right") {
-                        return Polymer.dom(this).firstElementChild.resize(value, origin);
+                        Polymer.dom(this).firstElementChild.resize(value, origin);
                     } else if (origin === "left") {
-                        return Polymer.dom(this).lastElementChild.resize(value, origin);
+                        Polymer.dom(this).lastElementChild.resize(value, origin);
                     }
                 }
                 Polymer.dom(this).childNodes.forEach(function(child) {
