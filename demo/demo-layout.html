@@ -5,9 +5,9 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="demo-panel.html">
 <link rel="import" href="demo-other-panel.html">
-<link rel="import" href="../magnet-editor.html">
+<link rel="import" href="../dude-layout.html">
 
-<dom-module id="demo-editor">
+<dom-module id="demo-layout">
 
     <style>
         :host {
@@ -22,7 +22,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 
     <script>
         Polymer({
-            is: "demo-editor",
+            is: "demo-layout",
 
             properties: {
                 config: {
@@ -98,7 +98,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             ready: function () {
-                var editor = new MagnetEditor();
+                var editor = new DudeLayout();
                 Polymer.dom(this).appendChild(editor);
                 editor.config = this.config;
                 editor.load();

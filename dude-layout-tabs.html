@@ -3,9 +3,9 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="magnet-editor-tab.html">
+<link rel="import" href="dude-layout-tab.html">
 
-<dom-module id="magnet-editor-tabs">
+<dom-module id="dude-layout-tabs">
 
     <style>
         :host {
@@ -16,7 +16,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             -webkit-user-select: none;
             user-select: none;
             font-size: .8em;
-            background: var(--magnet-editor-background);
+            background: var(--dude-layout-background);
             @apply(--magnet-grid-tabs);
         }
     </style>
@@ -26,8 +26,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
     </template>
 
     <script>
-        MagnetEditorTabs = Polymer({
-            is: "magnet-editor-tabs",
+        DudeLayoutTabs = Polymer({
+            is: "dude-layout-tabs",
 
             properties: {
                 selected: {
@@ -56,7 +56,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             select: function (tab) {
-                if (!(tab instanceof MagnetEditorTab)) {
+                if (!(tab instanceof DudeLayoutTab)) {
                     if (typeof tab === "number" && tab < this._getTabs().length) {
                         tab = this._getTabs()[tab];
                     } else if (typeof tab === "string") {
@@ -88,12 +88,12 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             addTab: function (name) {
-                Polymer.dom(this).appendChild(new MagnetEditorTab(name));
+                Polymer.dom(this).appendChild(new DudeLayoutTab(name));
             },
 
             addTabBefore: function (name, before) {
                 if (Polymer.dom(before).parentNode === this) {
-                    Polymer.dom(this).insertBefore(new MagnetEditorTab(name), before);
+                    Polymer.dom(this).insertBefore(new DudeLayoutTab(name), before);
                 }
             },
 

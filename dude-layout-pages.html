@@ -4,7 +4,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../polymer/polymer.html">
 
-<dom-module id="magnet-editor-pages">
+<dom-module id="dude-layout-pages">
 
     <style>
         :host {
@@ -12,9 +12,9 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             display: flex;
             flex: 1;
             overflow: hidden;
-            background: var(--magnet-editor-panel-background);
+            background: var(--dude-layout-panel-background);
             padding: 5px;
-            border-radius: 0 0 var(--magnet-editor-border-radius) var(--magnet-editor-border-radius);
+            border-radius: 0 0 var(--dude-layout-border-radius) var(--dude-layout-border-radius);
         }
 
         :host > ::content > :not(.active) {
@@ -27,8 +27,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
     </template>
 
     <script>
-        MagnetEditorPages = Polymer({
-            is: "magnet-editor-pages",
+        DudeLayoutPages = Polymer({
+            is: "dude-layout-pages",
 
             properties: {
                 selected: {

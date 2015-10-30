@@ -3,10 +3,10 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="magnet-editor-tabs.html">
-<link rel="import" href="magnet-editor-pages.html">
+<link rel="import" href="dude-layout-tabs.html">
+<link rel="import" href="dude-layout-pages.html">
 
-<dom-module id="magnet-editor-block">
+<dom-module id="dude-layout-block">
 
     <style>
         :host {
@@ -18,21 +18,21 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             align-items: stretch;
             flex-direction: column;
 
-            min-width: var(--magnet-editor-panel-min-width);
-            min-height: var(--magnet-editor-panel-min-height);
+            min-width: var(--dude-layout-panel-min-width);
+            min-height: var(--dude-layout-panel-min-height);
 
             @apply(--magnet-grid-block);
         }
     </style>
 
     <template>
-        <magnet-editor-tabs id="tabs" selected="{{selected}}"></magnet-editor-tabs>
-        <magnet-editor-pages id="panels" selected="{{selected}}"></magnet-editor-pages>
+        <dude-layout-tabs id="tabs" selected="{{selected}}"></dude-layout-tabs>
+        <dude-layout-pages id="panels" selected="{{selected}}"></dude-layout-pages>
     </template>
 
     <script>
-        MagnetEditorBlock = Polymer({
-            is: "magnet-editor-block",
+        DudeLayoutBlock = Polymer({
+            is: "dude-layout-block",
 
             properties: {
                 selected: {

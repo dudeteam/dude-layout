@@ -1,18 +1,18 @@
 {
-  "name": "magnet-editor",
+  "name": "dude-layout",
   "version": "0.0.1",
   "authors": [
     "Maxime Perrimond <max.perrimond@gmail.com>"
   ],
-  "description": "Polymer element providing a editor/panel system.",
+  "description": "Polymer element providing a layout with panels.",
   "keywords": [
-    "magnet",
-    "editor",
+    "dude",
+    "layout",
     "panel"
   ],
-  "main": "magnet-editor.html",
+  "main": "dude-layotu.html",
   "license": "MIT",
-  "homepage": "https://github.com/dudeteam/magnet-state/",
+  "homepage": "https://github.com/dudeteam/dude-layout/",
   "ignore": [
     "bower_components",
     "/.*",

@@ -3,9 +3,9 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="magnet-editor-separator.html">
+<link rel="import" href="dude-layout-separator.html">
 
-<dom-module id="magnet-editor-dock">
+<dom-module id="dude-layout-dock">
 
     <style>
         :host {
@@ -30,8 +30,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
     </template>
 
     <script>
-        MagnetEditorDock = Polymer({
-            is: "magnet-editor-dock",
+        DudeLayoutDock = Polymer({
+            is: "dude-layout-dock",
 
             properties: {
                 horizontal: {
@@ -43,7 +43,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 
             addElement: function (element) {
                 if (Polymer.dom(this).childNodes.length > 0) {
-                    var separator = new MagnetEditorSeparator();
+                    var separator = new DudeLayoutSeparator();
                     separator.horizontal = this.horizontal;
                     Polymer.dom(this).appendChild(separator);
                 }
@@ -51,7 +51,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             addElementBefore: function (element, before) {
-                var separator = new MagnetEditorSeparator();
+                var separator = new DudeLayoutSeparator();
                 separator.horizontal = this.horizontal;
 
                 Polymer.dom(this).insertBefore(separator, before);
@@ -103,7 +103,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                 }
                 for (var i = 0; i < Polymer.dom(this).childNodes.length; i++) {
                     var child = Polymer.dom(this).childNodes[i];
-                    if (!(child instanceof MagnetEditorSeparator)) {
+                    if (!(child instanceof DudeLayoutSeparator)) {
                         if (!child.isResizable(value, origin)) {
                             return false;
                         }
@@ -134,7 +134,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
                     }
                 }
                 Polymer.dom(this).childNodes.forEach(function(child) {
-                    if (!(child instanceof MagnetEditorSeparator)) {
+                    if (!(child instanceof DudeLayoutSeparator)) {
                         child.resize(value, origin);
                     }
                 });

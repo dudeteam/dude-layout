@@ -3,11 +3,17 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="magnet-editor-dock.html">
-<link rel="import" href="magnet-editor-block.html">
-<link rel="import" href="magnet-editor-style.html">
+<link rel="import" href="dude-layout-dock.html">
+<link rel="import" href="dude-layout-block.html">
+<link rel="import" href="dude-layout-style.html">
 
-<dom-module id="magnet-editor">
+<!--
+`dude-layout` is a Polymer element for dynamic hierarchies
+@group dude-layout
+@element dude-layout
+@demo demo/index.html
+-->
+<dom-module id="dude-layout">
 
     <style>
         :host {
@@ -20,10 +26,10 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             user-select: none;
             -webkit-user-select: none;
 
-            padding: var(--magnet-editor-separator-size);
-            background: var(--magnet-editor-background);
+            padding: var(--dude-layout-separator-size);
+            background: var(--dude-layout-background);
 
-            @apply(--magnet-editor);
+            @apply(--dude-layout);
         }
     </style>
 
@@ -32,8 +38,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
     </template>
 
     <script>
-        MagnetEditor = Polymer({
-            is: "magnet-editor",
+        DudeLayout = Polymer({
+            is: "dude-layout",
 
             properties: {
                 mainDock: {
@@ -95,7 +101,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             createDock: function (element) {
-                var dock = new MagnetEditorDock();
+                var dock = new DudeLayoutDock();
                 if (element.horizontal !== undefined) {dock.horizontal = element.horizontal;}
                 for (var i = 0; i < element.sub.length; i++) {
                     dock.addElement(this._createElement(element.sub[i]));
@@ -114,7 +120,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
             },
 
             createBlock: function (element) {
-                var block = new MagnetEditorBlock();
+                var block = new DudeLayoutBlock();
                 for (var i = 0; i < element.sub.length; i++) {
                     block.addPanel(element.sub[i].title, this.createPanel(element.sub[i]));
                 }

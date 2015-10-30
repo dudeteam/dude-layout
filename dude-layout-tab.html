@@ -4,7 +4,7 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 -->
 <link rel="import" href="../polymer/polymer.html">
 
-<dom-module id="magnet-editor-tab">
+<dom-module id="dude-layout-tab">
 
     <style>
         :host {
@@ -24,8 +24,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
 
         :host(.active) {
             color: var(--title-color);
-            background: var(--magnet-editor-panel-background);
-            border-radius: var(--magnet-editor-border-radius) var(--magnet-editor-border-radius) 0 0;
+            background: var(--dude-layout-panel-background);
+            border-radius: var(--dude-layout-border-radius) var(--dude-layout-border-radius) 0 0;
 
             @apply(--magnet-grid-tab-active);
         }
@@ -41,8 +41,8 @@ Authored by Maxime Perrimond <max.perrimond@gmail.com>
     </template>
 
     <script>
-        MagnetEditorTab = Polymer({
-            is: "magnet-editor-tab",
+        DudeLayoutTab = Polymer({
+            is: "dude-layout-tab",
 
             properties: {
                 name: {
