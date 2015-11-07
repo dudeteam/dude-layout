@@ -30,8 +30,8 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
     </style>
 
     <template>
-        <dude-layout-tabs id="tabs" selected="{{selected}}"></dude-layout-tabs>
-        <dude-layout-pages id="panels" selected="{{selected}}"></dude-layout-pages>
+        <dude-layout-tabs id="tabs" selected="{{_selected}}"></dude-layout-tabs>
+        <dude-layout-pages id="pages" selected="{{_selected}}"></dude-layout-pages>
     </template>
 
     <script>
@@ -39,24 +39,109 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             is: "dude-layout-block",
 
             properties: {
-                selected: {
-                    type: String,
-                    notify: true,
-                    value: "0"
+
+                /**
+                 * Config of this block and it children.
+                 *
+                 * @type {Object}
+                 */
+                config: {
+                    type: Object
                 },
 
-                checked: {
+                /**
+                 * Option to enable the auto-save the current config object.
+                 *
+                 * @type {Boolean}
+                 */
+                autoSave: {
                     type: Boolean,
                     value: false
+                },
+
+                /**
+                 * Contains all children elements of the block.
+                 *
+                 * @private
+                 * @type {Array<{DudeLayoutTab, Object}>}
+                 */
+                _children: {
+                    type: Array,
+                    value: []
+                },
+
+                /**
+                 * Defines the current page and tab selection by the ID.
+                 *
+                 * @private
+                 * @type {String}
+                 */
+                _selected: {
+                    type: String,
+                    notify: true
                 }
             },
 
-            addPanel: function (title, panel) {
-                this._getTabs().addTab(title);
-
-                Polymer.dom(this._getPanels()).appendChild(panel);
-                Polymer.dom.flush();
+            /**
+             * DudeLayoutBlock constructor.
+             * It will load automatically load the config given.
+             *
+             * @constructor
+             * @param config {Object}
+             */
+            factoryImpl: function (config) {
+                this.config = config;
+                this.load();
             },
+
+            /**
+             * Load the block from the config.
+             */
+            load: function () {
+                if (this.config.type === "block") {
+                    this.config.children.forEach(function (child) {
+                        if (child.type === "page") {
+                            var page = new window[child.page];
+                            this.insertElementBefore(page, child.title, undefined);
+                            if (!this._selected || (child.selected !== undefined && child.selected === true)) {
+                                this._getTabs().select(page.id);
+                            }
+                        }
+                    }.bind(this));
+                }
+            },
+
+            /**
+             * Insert the page object from the config in the dock.
+             * A tab will be created with the given title.
+             *
+             * @param page      {Object}
+             * @param title     {String}
+             * @param before    {DudeLayoutTab, Object, string}
+             */
+            insertElementBefore: function (page, title, before) {
+                var tab = new DudeLayoutTab(title);
+                var id = Math.random().toString(36).substr(2, 9);
+                tab.id = id;
+                page.id = id;
+                this._children.push({
+                    "panel": page,
+                    "tab": tab,
+                    "id": id
+                });
+                this._getTabs().insertBefore(tab, (before !== undefined) ? before.tab : undefined);
+                this._getPages().insertBefore(page, (before !== undefined) ? before.panel : undefined);
+            },
+
+            _getTabs: function () {
+                return this.$.tabs;
+            },
+
+            _getPages: function () {
+                return this.$.pages;
+            },
+
+            // TODO redo les fonctions en dessous
 
             removePanel: function (panel) {
                 var p = Polymer.dom(this._getPanels).querySelector(panel.is);
@@ -72,22 +157,6 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                     }
                     return true;
                 });
-                Polymer.dom.flush();
-            },
-
-            select: function (tab) {
-                this._getTabs().select(tab);
-            },
-
-            _getTabs: function () {
-                return this.$.tabs;
-            },
-
-            _getPanels: function () {
-                return this.$.panels;
-            },
-
-            flush: function () {
                 Polymer.dom.flush();
             },
 

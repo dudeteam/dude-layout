@@ -21,7 +21,7 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             border-radius: 0 0 var(--dude-layout-border-radius) var(--dude-layout-border-radius);
         }
 
-        :host > ::content > :not(.active) {
+        :host > ::content > :not(.dude-layout-page-active) {
             display: none !important;
         }
     </style>
@@ -35,42 +35,59 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             is: "dude-layout-pages",
 
             properties: {
+
+                /**
+                 * Define the current selection.
+                 *
+                 * @type {String}
+                 */
                 selected: {
                     type: String,
                     observer: "_selectedChanged"
                 },
 
-                activePage: {
+                /**
+                 * The current page selected.
+                 *
+                 * @private
+                 * @type {Object}
+                 */
+                _activePage: {
                     type: Object,
                     value: null
                 }
             },
 
+            /**
+             * Insert a 'page' element before another one if set.
+             *
+             * @param page      Object
+             * @param before    Object
+             */
+            insertBefore: function (page, before) {
+                if (before && Polymer.dom(this).childNodes.contains(before)) {
+                    Polymer.dom(this).insertBefore(page, before);
+                } else {
+                    Polymer.dom(this).appendChild(page);
+                }
+            },
+
+            /**
+             * When the attribute selected changed, another page appears.
+             *
+             * @private
+             * @param selected
+             */
             _selectedChanged: function (selected) {
-                if (typeof selected === "number") {
-                    if (this._getPages().length > selected) {
-                        this._activatePage(this._getPages()[selected]);
-                    }
-                } else if (typeof selected === "string") {
-                    for (var i = 0; i < this._getPages().length; i++) {
-                        if (this._getPages()[i].name === selected) {
-                            this._activatePage(this._getPages()[i]);
-                            return;
+                Polymer.dom(this).childNodes.forEach(function (page) {
+                    if (page.id !== undefined && page.id === selected) {
+                        if (this._activePage !== null) {
+                            this._activePage.classList.remove("dude-layout-page-active");
                         }
+                        this._activePage = page;
+                        this._activePage.classList.add("dude-layout-page-active");
                     }
-                }
-            },
-
-            _activatePage: function (page) {
-                if (this.activePage !== null) {
-                    this.activePage.classList.remove("active");
-                }
-                this.activePage = page;
-                this.activePage.classList.add("active");
-            },
-
-            _getPages: function () {
-                return Polymer.dom(this).childNodes;
+                }.bind(this));
             }
         });
     </script>

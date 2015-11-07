@@ -3,11 +3,10 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 -->
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="dude-layout-dock.html">
-<link rel="import" href="dude-layout-block.html">
 <link rel="import" href="dude-layout-style.html">
 
 <!--
-`dude-layout` is a Polymer element for dynamic hierarchies
+`dude-layout`
 @group dude-layout
 @element dude-layout
 @demo demo/index.html
@@ -41,125 +40,90 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             is: "dude-layout",
 
             properties: {
-                mainDock: {
-                    type: Object
-                },
 
-                docks: {
-                    type: Array,
-                    value: []
-                },
-
-                blocks: {
-                    type: Array,
-                    value: []
-                },
-
-                panels: {
-                    type: Array,
-                    value: []
-                },
-
+                /**
+                 * The layout config, could be modify by DudeLayout on saving.
+                 *
+                 * @type {Object}
+                 */
                 config: {
                     type: Object,
+                    reflectToAttribute: true,
                     notify: true
+                },
+
+                /**
+                 * Option to enable the auto-save the current config object.
+                 * If set, all sub elements will be also in auto-save mod.
+                 *
+                 * @type {Boolean}
+                 */
+                autoSave: {
+                    type: Boolean,
+                    value: false,
+                    reflectToAttribute: true
+                },
+
+                /**
+                 * When loaded, this contain the main DudeDock of the layout.
+                 *
+                 * @private
+                 * @type {DudeLayoutDock}
+                 */
+                _layout: {
+                    type: DudeLayoutDock,
+                    value: null
+                }
+
+            },
+
+            /**
+             * Load the layout from the config given.
+             * If a layout is already loaded, it will be destroyed
+             */
+            load: function () {
+                if (this.config !== undefined) {
+                    if (this.config.type === "main") {
+                        if (this._layout !== null) {
+                            this.destroy();
+                        }
+                        this._layout = new DudeLayoutDock(this.config);
+                        this._layout.autoSave = this.autoSave;
+                        Polymer.dom(this).appendChild(this._layout);
+                        Polymer.dom.flush();
+                    }
                 }
             },
 
-            factoryImpl: function (editor) {
-                this.config = editor;
-            },
-
-            resizeEditor: function (deltaX, deltaY) {
-                if (this.mainDock.isResizable(deltaX, "right") && this.mainDock.isResizable(deltaY, "bottom")) {
+            /**
+             * TODO
+             */
+            resize: function (deltaX, deltaY) {
+/*                if (this.mainDock.isResizable(deltaX, "right") && this.mainDock.isResizable(deltaY, "bottom")) {
                     this.mainDock.resize(deltaX, "right");
                     this.mainDock.resize(deltaX, "left");
+                }*/
+            },
+
+            /**
+             * Execute the saving of the current layout configuration in the config.
+             */
+            save: function () {
+                if (this._layout !== null) {
+                    this._layout.save();
                 }
             },
 
-            reload: function () {
-                this.load();
-            },
-
-            load: function () {
-                Polymer.dom(this).appendChild(this._createElement(this.config));
-                this.flush();
-            },
-
-            _createElement: function (element) {
-                switch (element.type) {
-                    case "dock":
-                        return this.createDock(element);
-                    case "block":
-                        return this.createBlock(element);
+            /**
+             * Destroy the current layout.
+             * But the config will not be affected.
+             */
+            destroy: function () {
+                if (this._layout !== null) {
+                    this._layout.destroy();
+                    Polymer.dom(this).removeChild(this._layout);
+                    Polymer.dom.flush();
                 }
-            },
-
-            _deleteElement: function (element) {
-                Polymer.dom(Polymer.dom(element).parentNode).removeChild(element);
-            },
-
-            createDock: function (element) {
-                var dock = new DudeLayoutDock();
-                if (element.horizontal !== undefined) {dock.horizontal = element.horizontal;}
-                for (var i = 0; i < element.sub.length; i++) {
-                    dock.addElement(this._createElement(element.sub[i]));
-                }
-                this.docks.push(dock);
-                if (this.mainDock == undefined) {
-                    this.mainDock = dock;
-                }
-                return dock;
-            },
-
-            removeDock: function (dock) {
-                if (this.docks.contains(dock)) {
-                    this._deleteElement(dock);
-                }
-            },
-
-            createBlock: function (element) {
-                var block = new DudeLayoutBlock();
-                for (var i = 0; i < element.sub.length; i++) {
-                    block.addPanel(element.sub[i].title, this.createPanel(element.sub[i]));
-                }
-                if (element.selected !== undefined) {
-                    block.select(element.selected);
-                } else {
-                    block.select(0);
-                }
-                this.blocks.push(block);
-                return block;
-            },
-
-            removeBlock: function (block) {
-                if (this.blocks.contains(block)) {
-                    this._deleteElement(block);
-                }
-            },
-
-            createPanel: function (element) {
-                var panel = new window[element.panel];
-                panel.name = element.title;
-                this.panels.push(panel);
-                return panel;
-            },
-
-            removePanel: function (panel) {
-                if (this.panels.contains(panel)) {
-                    this._deleteElement(panel);
-                }
-            },
-
-            flush: function () {
-                Polymer.dom.flush();
-            },
-
-            clear: function () {
-                Polymer.dom(this).childNodes.forEach(function (e) {
-                    Polymer.dom(this).removeChild(e);
-                });
-                this.flush();
             }
         });
     </script>

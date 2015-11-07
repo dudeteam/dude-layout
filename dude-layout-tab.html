@@ -49,6 +49,12 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             is: "dude-layout-tab",
 
             properties: {
+
+                /**
+                 * Display name.
+                 *
+                 * @type {String}
+                 */
                 name: {
                     type: String
                 }
@@ -62,13 +68,17 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 role: "tab"
             },
 
+            /**
+             * @constructor
+             * @param name
+             */
             factoryImpl: function (name) {
                 this.name = name;
             },
 
             _onClick: function (event) {
                 event.stopPropagation();
-                this.fire("tab-click", {});
+                this.fire("dude-layout-tab-click", {});
             }
         });
     </script>

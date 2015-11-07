@@ -34,76 +34,72 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             is: "dude-layout-tabs",
 
             properties: {
+
+                /**
+                 * Define the current selection.
+                 *
+                 * @type {String}
+                 */
                 selected: {
                     type: String,
                     notify: true
                 },
 
-                activeTab: {
-                    type: Object,
+                /**
+                 * The current tab selected.
+                 *
+                 * @private
+                 * @type {DudeLayoutTab}
+                 */
+                _activeTab: {
+                    type: DudeLayoutTab,
                     value: null
                 }
             },
 
             listeners: {
-                'tab-click': '_onTabClick'
+                'dude-layout-tab-click': '_onTabClick'
             },
 
             hostAttributes: {
                 role: 'tablist'
             },
 
-            ready: function () {
-                if (this._getTabs().length > 0) {
-                    this.select(this._getTabs()[0]);
-                }
-            },
-
             select: function (tab) {
                 if (!(tab instanceof DudeLayoutTab)) {
-                    if (typeof tab === "number" && tab < this._getTabs().length) {
-                        tab = this._getTabs()[tab];
-                    } else if (typeof tab === "string") {
-                        if (this._getTabs().every(function (t) {
-                                    if (t.name === tab) {
-                                        tab = t;
-                                        return false;
-                                    }
-                                    return true;
-                                })) {
-                            tab = null;
+                    if (this._getTabs().every(function (t) {
+                        if (t.id === tab) {
+                            tab = t;
+                            return false;
                         }
-                    } else {
+                        return true;
+                    })) {
                         tab = null;
                     }
                 }
-
                 if (tab !== null) {
-                    if (tab !== this.activeTab) {
-                        if (this.activeTab !== null ) {
-                            this.activeTab.classList.remove("active");
+                    if (tab !== this._activeTab) {
+                        if (this._activeTab !== null ) {
+                            this._activeTab.classList.remove("active");
                         }
-                        this.activeTab = tab;
-                        this.activeTab.classList.add("active");
-
-                        this.selected = tab.name;
+                        this._activeTab = tab;
+                        this._activeTab.classList.add("active");
+                        this.selected = tab.id;
                     }
                 }
             },
 
-            addTab: function (name) {
-                Polymer.dom(this).appendChild(new DudeLayoutTab(name));
-            },
-
-            addTabBefore: function (name, before) {
-                if (Polymer.dom(before).parentNode === this) {
-                    Polymer.dom(this).insertBefore(new DudeLayoutTab(name), before);
+            insertBefore: function (tab, before) {
+                if (before && this._getTabs().contains(before)) {
+                    Polymer.dom(this).insertBefore(tab, before);
+                } else {
+                    Polymer.dom(this).appendChild(tab);
                 }
             },
 
             moveTab: function (tab, before) {
                 this.removeTab(tab);
-                this.addTabBefore(tab.name, before);
+                this.insertBefore(tab.name, before);
             },
 
             removeTab: function (tab) {
@@ -119,10 +115,6 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 
             _getTabs: function () {
                 return Polymer.dom(this).childNodes;
-            },
-
-            flush: function () {
-                Polymer.dom.flush();
             }
         });
     </script>

@@ -3,6 +3,7 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 -->
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="dude-layout-separator.html">
+<link rel="import" href="dude-layout-block.html">
 
 <!--
 `dude-layout-dock`
@@ -38,63 +39,141 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             is: "dude-layout-dock",
 
             properties: {
+
+                /**
+                 * Config of this dock and it children.
+                 *
+                 * @type {Object}
+                 */
+                config: {
+                    type: Object,
+                    notify: true
+                },
+
+                /**
+                 * Option to enable the auto-save the current config object.
+                 *
+                 * @type {Boolean}
+                 */
+                autoSave: {
+                    type: Boolean,
+                    value: false
+                },
+
+                /**
+                 * Defines the direction of sub elements in the dock.
+                 * If false, the direction is vertical.
+                 *
+                 * @type {Boolean}
+                 */
                 horizontal: {
                     type: Boolean,
                     value: false,
                     reflectToAttribute: true
+                },
+
+                /**
+                 * Contains all children elements of the dock.
+                 *
+                 * @private
+                 * @type {Array<DudeLayoutDock|DudeLayoutBlock>}
+                 */
+                _children: {
+                    type: Array,
+                    value: []
                 }
             },
 
             /**
+             * DudeLayoutDock constructor.
+             * It will load automatically load the config given.
              *
+             * @constructor
+             * @param config {Object}
              */
-            addElement: function (element) {
-                if (Polymer.dom(this).childNodes.length > 0) {
-                    var separator = new DudeLayoutSeparator();
-                    separator.horizontal = this.horizontal;
-                    Polymer.dom(this).appendChild(separator);
+            factoryImpl: function (config) {
+                this.config = config;
+                this.load();
+            },
+
+            /**
+             * Load the dock from the config.
+             */
+            load: function () {
+                if (this.config.type === "dock" || this.config.type === "main") {
+                    if (this.config.horizontal !== undefined) {this.horizontal = this.config.horizontal;}
+                    this.config.children.forEach(function (child) {
+                        var element = null;
+                        switch (child.type) {
+                            case "dock":
+                                element = new DudeLayoutDock(child);
+                                break;
+                            case "block":
+                                element = new DudeLayoutBlock(child);
+                                break;
+                            default:
+                                break;
+                        }
+                        if (element != null) {
+                            element.autoSave = this.autoSave;
+                            this.insertElementBefore(element, null);
+                        }
+                    }.bind(this));
                 }
-                Polymer.dom(this).appendChild(element);
             },
 
             /**
-             *
+             * Insert a new element in the dock.
+             * If 'before' element is set, it will insert the new element before it.
              */
-            addElementBefore: function (element, before) {
-                var separator = new DudeLayoutSeparator();
-                separator.horizontal = this.horizontal;
-
-                Polymer.dom(this).insertBefore(separator, before);
-                Polymer.dom(this).insertBefore(element, before);
-            },
-
-            /**
-             *
-             */
-            moveElement: function (element, before) {
-                this.removeElement(element);
-                if (before === undefined || Polymer.dom(before).parentNode !== this) {
-                    this.addElement(element);
-                } else {
-                    this.addElementBefore(element, before);
-                }
-            },
-
-            /**
-             *
-             */
-            removeElement: function (element) {
-                if (Polymer.dom(element).parentNode === this) {
-                    if (Polymer.dom(element).previousSibling &&
-                            Polymer.dom(element).previousSibling.constructor === "MagnetGridSeparator") {
-                        Polymer.dom(this).removeChild(Polymer.dom(element).previousSibling);
-                    } else if (Polymer.dom(element).nextSibling &&
-                            Polymer.dom(element).nextSibling.constructor === "MagnetGridSeparator") {
-                        Polymer.dom(this).removeChild(Polymer.dom(element).nextSibling);
+            insertElementBefore: function (element, before) {
+                if (before) {
+                    if (!Polymer.dom(this).childNodes.contains(before)) {
+                        console.log("bite");
+                        return;
                     }
-                    Polymer.dom(this).removeChild(element);
+                    var sep = new DudeLayoutSeparator();
+                    sep.horizontal = this.horizontal;
+                    Polymer.dom(this).insertBefore(sep, before);
+                    Polymer.dom(this).insertBefore(element, sep);
+                    this._children.splice(this.children.indexOf(before), 0, element);
+                } else {
+                    if (Polymer.dom(this).childNodes.length != 0) {
+                        var separator = new DudeLayoutSeparator();
+                        separator.horizontal = this.horizontal;
+                        Polymer.dom(this).appendChild(separator);
+                    }
+                    Polymer.dom(this).appendChild(element);
+                    this._children.push(element);
                 }
+                Polymer.dom.flush();
             },
+
+            /**
+             * Execute the saving of the current configuration in the config.
+             */
+            save: function () {
+                this.config.children = [];
+                this._children.forEach(function (child) {
+                    child.save();
+                    this.config.children.push(child);
+                }.bind(this))
+            },
+
+            /**
+             * Destroy the current dock and children.
+             * But the config will not be affected.
+             */
+            destroy: function () {
+                Polymer.dom(this).childNodes.forEach(function (child) {
+                    if (this.children.contains(child)) {
+                        child.destroy();
+                    }
+                    Polymer.dom(this).removeChild(child);
+                }.bind(this))
+            },
+
+            // TODO redo les fonctions en dessous
 
             /**
              * Returns whether the dock is resizable.
@@ -156,10 +235,6 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                         child.resize(value, origin);
                     }
                 });
-            },
-
-            flush: function () {
-                Polymer.dom.flush();
             }
         });
     </script>
