@@ -23,8 +23,9 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 
             user-select: none;
             -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
 
-            padding: var(--dude-layout-separator-size);
             background: var(--dude-layout-background);
 
             @apply(--dude-layout);
@@ -65,6 +66,19 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 },
 
                 /**
+                 * Define the size of separators in the layout.
+                 * By default, the size is 5 (px).
+                 * This size can be define in the configuration object.
+                 *
+                 * @type {Number}
+                 */
+                separatorSize: {
+                    type: Number,
+                    value: 5,
+                    reflectToAttribute: true
+                },
+
+                /**
                  * When loaded, this contain the main DudeDock of the layout.
                  *
                  * @private
@@ -73,6 +87,26 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 _layout: {
                     type: DudeLayoutDock,
                     value: null
+                },
+
+                /**
+                 * The current width of the main layout.
+                 *
+                 * @private
+                 * @type {Number}
+                 */
+                _width: {
+                    type: Number
+                },
+
+                /**
+                 * The current width of the main layout.
+                 *
+                 * @private
+                 * @type {Number}
+                 */
+                _height: {
+                    type: Number
                 }
 
             },
@@ -87,7 +121,25 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                         if (this._layout !== null) {
                             this.destroy();
                         }
-                        this._layout = new DudeLayoutDock(this.config);
+                        if (this.config.separator && this.config.separator.size) {
+                            this.separatorSize = this.config.separator.size;
+                        }
+                        this._width = window.innerWidth
+                                || document.documentElement.clientWidth
+                                || document.body.clientWidth;
+                        this._height = window.innerHeight
+                                || document.documentElement.clientHeight
+                                || document.body.clientHeight;
+                        this._layout = new DudeLayoutDock(
+                                this.config,
+                                this.separatorSize,
+                                this.separatorSize,
+                                this.separatorSize,
+                                this.separatorSize,
+                                this.separatorSize,
+                                this._width - (this.separatorSize * 2),
+                                this._height - (this.separatorSize * 2)
+                        );
                         this._layout.autoSave = this.autoSave;
                         Polymer.dom(this).appendChild(this._layout);
                         Polymer.dom.flush();

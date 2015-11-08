@@ -14,19 +14,9 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 
     <style>
         :host {
-            display: flex;
-            flex: 1;
-            flex-wrap: nowrap;
-            align-content: stretch;
-            align-items: stretch;
-            flex-direction: column;
-            height: 100%;
+            position: absolute;
 
-            @apply(--magnet-grid-container);
-        }
-
-        :host([horizontal]) {
-            flex-direction: row;
+            @apply(--dude-layout-dock);
         }
     </style>
 
@@ -81,7 +71,18 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 _children: {
                     type: Array,
                     value: []
+                },
+
+                /**
+                 * Define the size of separators in the layout.
+                 *
+                 * @private
+                 * @type {Number}
+                 */
+                _separatorSize: {
+                    type: Number
                 }
+
             },
 
             /**
@@ -89,64 +90,142 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
              * It will load automatically load the config given.
              *
              * @constructor
-             * @param config {Object}
+             * @param config        {Object}
+             * @param separatorSize {Number}
+             * @param top           {Number}
+             * @param right         {Number}
+             * @param bottom        {Number}
+             * @param left          {Number}
+             * @param width         {Number}
+             * @param height        {Number}
              */
-            factoryImpl: function (config) {
+            factoryImpl: function (config, separatorSize, top, right, bottom, left, width, height) {
                 this.config = config;
-                this.load();
+                this._separatorSize = separatorSize;
+                this.style.top = top + "px";
+                this.style.right = right + "px";
+                this.style.bottom = bottom + "px";
+                this.style.left = left + "px";
+                this.load(width, height);
             },
 
             /**
              * Load the dock from the config.
+             *
+             * @param width     {Number}
+             * @param height    {Number}
              */
-            load: function () {
+            load: function (width, height) {
                 if (this.config.type === "dock" || this.config.type === "main") {
-                    if (this.config.horizontal !== undefined) {this.horizontal = this.config.horizontal;}
-                    this.config.children.forEach(function (child) {
+                    if (this.config.horizontal !== undefined) {
+                        this.horizontal = this.config.horizontal;
+                    }
+                    var elementDefaultSize = this._calculateElementDefaultSize(width, height, this.config.children.length);
+                    for (var i = 0; i < this.config.children.length; i++) {
+                        if (i > 0) {
+                            if (this.horizontal) {
+                                elementDefaultSize.right -= this._separatorSize;
+                                elementDefaultSize.left += elementDefaultSize.width;
+                            } else {
+                                elementDefaultSize.bottom -= this._separatorSize;
+                                elementDefaultSize.top += elementDefaultSize.height;
+                            }
+                            Polymer.dom(this).appendChild(new DudeLayoutSeparator(
+                                    this.horizontal,
+                                    this._separatorSize,
+                                    elementDefaultSize.top,
+                                    elementDefaultSize.right,
+                                    elementDefaultSize.bottom,
+                                    elementDefaultSize.left
+                            ));
+                            if (this.horizontal) {
+                                elementDefaultSize.right -= elementDefaultSize.width;
+                                elementDefaultSize.left += this._separatorSize;
+                            } else {
+                                elementDefaultSize.bottom -= elementDefaultSize.height;
+                                elementDefaultSize.top += this._separatorSize;
+                            }
+                        }
                         var element = null;
+                        var child = this.config.children[i];
                         switch (child.type) {
                             case "dock":
-                                element = new DudeLayoutDock(child);
+                                element = new DudeLayoutDock(
+                                        child,
+                                        this._separatorSize,
+                                        elementDefaultSize.top,
+                                        elementDefaultSize.right,
+                                        elementDefaultSize.bottom,
+                                        elementDefaultSize.left,
+                                        elementDefaultSize.width,
+                                        elementDefaultSize.height
+                                );
                                 break;
                             case "block":
-                                element = new DudeLayoutBlock(child);
+                                element = new DudeLayoutBlock(
+                                        child,
+                                        elementDefaultSize.top,
+                                        elementDefaultSize.right,
+                                        elementDefaultSize.bottom,
+                                        elementDefaultSize.left
+                                );
                                 break;
                             default:
                                 break;
                         }
                         if (element != null) {
                             element.autoSave = this.autoSave;
-                            this.insertElementBefore(element, null);
+                            Polymer.dom(this).appendChild(element);
                         }
-                    }.bind(this));
+                    }
                 }
             },
 
             /**
-             * Insert a new element in the dock.
-             * If 'before' element is set, it will insert the new element before it.
+             * Calculate the default size for each children.
+             *
+             * @param width         {Number}
+             * @param height        {Number}
+             * @param nbElements    {Number}
+             *
+             * @return {{Number, Number, Number, Number, Number, Number, Number}}
              */
-            insertElementBefore: function (element, before) {
-                if (before) {
-                    if (!Polymer.dom(this).childNodes.contains(before)) {
-                        console.log("bite");
-                        return;
+            _calculateElementDefaultSize: function (width, height, nbElements) {
+                var top = 0;
+                var right = 0;
+                var bottom = 0;
+                var left = 0;
+                var elementWidth = 0;
+                var elementHeight = 0;
+                if (nbElements > 1) {
+                    if (this.horizontal) {
+                        width -= (nbElements - 1) * this._separatorSize;
+                    } else {
+                        height -= (nbElements - 1) * this._separatorSize;
                     }
-                    var sep = new DudeLayoutSeparator();
-                    sep.horizontal = this.horizontal;
-                    Polymer.dom(this).insertBefore(sep, before);
-                    Polymer.dom(this).insertBefore(element, sep);
-                    this._children.splice(this.children.indexOf(before), 0, element);
-                } else {
-                    if (Polymer.dom(this).childNodes.length != 0) {
-                        var separator = new DudeLayoutSeparator();
-                        separator.horizontal = this.horizontal;
-                        Polymer.dom(this).appendChild(separator);
-                    }
-                    Polymer.dom(this).appendChild(element);
-                    this._children.push(element);
                 }
-                Polymer.dom.flush();
+                if (this.horizontal) {
+                    elementHeight = height;
+                    elementWidth = width / nbElements;
+                    if (nbElements > 1) {
+                        right += ((nbElements - 1) * this._separatorSize) + ((nbElements - 1) * elementWidth);
+                    }
+                } else {
+                    elementHeight = height / nbElements;
+                    elementWidth = width;
+                    if (nbElements > 1) {
+                        bottom += ((nbElements - 1) * this._separatorSize) + ((nbElements - 1) * elementHeight);
+                    }
+                }
+                return {
+                    "width": elementWidth,
+                    "height": elementHeight,
+                    "nbElements": nbElements,
+                    "top": top,
+                    "right": right,
+                    "bottom": bottom,
+                    "left": left
+                }
             },
 
             /**

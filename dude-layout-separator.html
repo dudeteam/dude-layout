@@ -12,25 +12,16 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 
     <style>
         :host {
-            display: flex;
-            flex: 0 0 var(--dude-layout-separator-size);
-            white-space: nowrap;
-            z-index: 2;
-            width: auto;
+            position: absolute;
             cursor: row-resize;
+
+            background-color: green;
 
             @apply(--dude-layout-separator);
         }
 
         :host([horizontal]) {
-            height: auto;
             cursor: col-resize;
-
-            @apply(--dude-layout-separator-h);
-        }
-
-        :host([thin]) {
-            flex: 0 0 var(--dude-layout-thin-separator-size);
         }
 
     </style>
@@ -43,22 +34,54 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             is: "dude-layout-separator",
 
             properties: {
+
+                /**
+                 * Define the way of the separator.
+                 *
+                 * @type {Boolean}
+                 */
                 horizontal: {
                     type: Boolean,
                     value: false,
                     reflectToAttribute: true
                 },
 
-                thin: {
-                    type: Boolean,
-                    value: false,
-                    reflectToAttribute: true
+                /**
+                 * Define the size of separators in the layout.
+                 *
+                 * @private
+                 * @type {Number}
+                 */
+                _separatorSize: {
+                    type: Number
                 }
+
             },
 
             listeners: {
                 track: "track",
                 down: "preventSelection"
+            },
+
+            /**
+             * DudeLayoutSeparator constructor.
+             *
+             * @constructor
+             * @param horizontal    {Boolean}
+             * @param separatorSize {Number}
+             * @param top           {Number}
+             * @param right         {Number}
+             * @param bottom        {Number}
+             * @param left          {Number}
+             */
+            factoryImpl: function (horizontal, separatorSize, top, right, bottom, left) {
+                this.horizontal = horizontal;
+                this._separatorSize = separatorSize;
+                this.style.top = top + "px";
+                this.style.right = right + "px";
+                this.style.bottom = bottom + "px";
+                this.style.left = left + "px";
+                console.log(separatorSize, top, right, bottom, left)
             },
 
             track: function (e) {

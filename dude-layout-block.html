@@ -14,6 +14,12 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 
     <style>
         :host {
+            position: absolute;
+
+            @apply(--dude-layout-block);
+        }
+
+        :host .dude-layout-dock-container {
             position: relative;
             box-sizing: border-box;
             display: flex;
@@ -21,17 +27,15 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             flex-wrap: nowrap;
             align-items: stretch;
             flex-direction: column;
-
-            min-width: var(--dude-layout-panel-min-width);
-            min-height: var(--dude-layout-panel-min-height);
-
-            @apply(--magnet-grid-block);
+            height: 100%;
         }
     </style>
 
     <template>
-        <dude-layout-tabs id="tabs" selected="{{_selected}}"></dude-layout-tabs>
-        <dude-layout-pages id="pages" selected="{{_selected}}"></dude-layout-pages>
+        <div class="dude-layout-dock-container">
+            <dude-layout-tabs id="tabs" selected="{{_selected}}"></dude-layout-tabs>
+            <dude-layout-pages id="pages" selected="{{_selected}}"></dude-layout-pages>
+        </div>
     </template>
 
     <script>
@@ -80,6 +84,7 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                     type: String,
                     notify: true
                 }
+
             },
 
             /**
@@ -87,10 +92,18 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
              * It will load automatically load the config given.
              *
              * @constructor
-             * @param config {Object}
+             * @param config    {Object}
+             * @param top       {Number}
+             * @param right     {Number}
+             * @param bottom    {Number}
+             * @param left      {Number}
              */
-            factoryImpl: function (config) {
+            factoryImpl: function (config, top, right, bottom, left) {
                 this.config = config;
+                this.style.top = top + "px";
+                this.style.right = right + "px";
+                this.style.bottom = bottom + "px";
+                this.style.left = left + "px";
                 this.load();
             },
 
@@ -142,23 +155,6 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             },
 
             // TODO redo les fonctions en dessous
-
-            removePanel: function (panel) {
-                var p = Polymer.dom(this._getPanels).querySelector(panel.is);
-                if (p === undefined) {
-                    return;
-                }
-                Polymer.dom(this._getPanels).removeChild(p);
-                panel._block = null;
-                Polymer.dom(this._getTabs).childNodes.every(function (child) {
-                    if (child.id === panel.name) {
-                        this.removeChild(child);
-                        return false;
-                    }
-                    return true;
-                });
-                Polymer.dom.flush();
-            },
 
             isResizable: function (value, from) {
                 if (((from === "top" || from === "bottom") && this.getHeight() + value < 200) || ((from === "right" || from === "left") && this.getWidth() + value < 200)) {
