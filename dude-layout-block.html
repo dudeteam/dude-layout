@@ -154,45 +154,30 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 return this.$.pages;
             },
 
-            // TODO redo les fonctions en dessous
-
-            isResizable: function (value, from) {
-                if (((from === "top" || from === "bottom") && this.getHeight() + value < 200) || ((from === "right" || from === "left") && this.getWidth() + value < 200)) {
+            isResizable: function (value, origin) {
+                if ((origin === "top" || origin === "bottom") && this.offsetHeight < value) {
+                    return false;
+                } else if ((origin === "right" || origin === "left") && this.offsetWidth < value) {
                     return false;
                 }
-                this.checked = true;
                 return true;
             },
 
-            resize: function (value, from) {
-                if (!this.checked) {
-                    return;
+            resize: function (value, origin) {
+                switch (origin) {
+                    case "top":
+                        this.style.top = (parseFloat(this.style.top) + value) + "px";
+                        break;
+                    case "bottom":
+                        this.style.bottom = (parseFloat(this.style.bottom) + value) + "px";
+                        break;
+                    case "right":
+                        this.style.right = (parseFloat(this.style.right) + value) + "px";
+                        break;
+                    case "left":
+                        this.style.left = (parseFloat(this.style.left) + value) + "px";
+                        break;
                 }
-                this.checked = false;
-                this.setWidth(this.getWidth());
-                this.setHeight(this.getHeight());
-                this.style["flex"] = "none";
-                if (from === "right" || from === "left") {
-                    this.setWidth(this.getWidth() + value);
-                } else if (from === "top" || from === "bottom") {
-                    this.setHeight(this.getHeight() + value);
-                }
-            },
-
-            getWidth: function () {
-                return parseFloat(getComputedStyle(this)["width"]);
-            },
-
-            getHeight: function () {
-                return parseFloat(getComputedStyle(this)["height"]);
-            },
-
-            setWidth: function (width) {
-                this.style["width"] = width + "px";
-            },
-
-            setHeight: function (height) {
-                this.style["height"] = height + "px";
             }
         });
     </script>

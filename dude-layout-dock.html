@@ -63,17 +63,6 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 },
 
                 /**
-                 * Contains all children elements of the dock.
-                 *
-                 * @private
-                 * @type {Array<DudeLayoutDock|DudeLayoutBlock>}
-                 */
-                _children: {
-                    type: Array,
-                    value: []
-                },
-
-                /**
                  * Define the size of separators in the layout.
                  *
                  * @private
@@ -188,7 +177,7 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
              * @param height        {Number}
              * @param nbElements    {Number}
              *
-             * @return {{Number, Number, Number, Number, Number, Number, Number}}
+             * @returns {{Number, Number, Number, Number, Number, Number, Number}}
              */
             _calculateElementDefaultSize: function (width, height, nbElements) {
                 var top = 0;
@@ -233,7 +222,7 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
              */
             save: function () {
                 this.config.children = [];
-                this._children.forEach(function (child) {
+                Polymer.dom(this).childNodes.forEach(function (child) {
                     child.save();
                     this.config.children.push(child);
                 }.bind(this))
@@ -252,27 +241,40 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 }.bind(this))
             },
 
-            // TODO redo les fonctions en dessous
-
             /**
              * Returns whether the dock is resizable.
+             *
              * @param value {Number} The resize delta in pixel
              * @param origin {String} The direction from which the resize comes from
-             * @returns {Boolean}
+             *
+             * @return {Boolean}
              */
             isResizable: function (value, origin) {
-                if (Polymer.dom(this).childNodes.length == 0) { return true; }
-                if (!this.horizontal) {
+                if (value > 0) {
                     if (origin === "top") {
-                        return Polymer.dom(this).firstElementChild.isResizable(value, origin);
+                        if (this.horizontal && this.offsetHeight < value) {
+                            return false;
+                        } else if (!this.horizontal && Polymer.dom(this).firstElementChild.offsetHeight < value) {
+                            return false;
+                        }
                     } else if (origin === "bottom") {
-                        return Polymer.dom(this).lastElementChild.isResizable(value, origin);
-                    }
-                } else {
-                    if (origin === "right") {
-                        return Polymer.dom(this).firstElementChild.isResizable(value, origin);
+                        if (this.horizontal && this.offsetHeight < value) {
+                            return false;
+                        } else if (!this.horizontal && Polymer.dom(this).lastElementChild.offsetHeight < value) {
+                            return false;
+                        }
+                    } else if (origin === "right") {
+                        if (this.horizontal && Polymer.dom(this).lastElementChild.offsetWidth < value) {
+                            return false;
+                        } else if (!this.horizontal && this.offsetWidth < value) {
+                            return false;
+                        }
                     } else if (origin === "left") {
-                        return Polymer.dom(this).lastElementChild.isResizable(value, origin);
+                        if (this.horizontal && Polymer.dom(this).firstElementChild.offsetWidth < value) {
+                            return false;
+                        } else if (!this.horizontal && this.offsetWidth < value) {
+                            return false;
+                        }
                     }
                 }
                 for (var i = 0; i < Polymer.dom(this).childNodes.length; i++) {
@@ -288,32 +290,53 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 
             /**
              * Performs the resize of the dock.
+             *
              * @param value {Number} The resize delta in pixel
              * @param origin {String} The direction from which the resize comes from
-             * @returns {*}
              */
             resize: function (value, origin) {
-                if (Polymer.dom(this).childNodes.length == 0 || isNaN(value)) {
-                    return;
-                }
-                if (!this.horizontal) {
+                if (this.horizontal) {
                     if (origin === "top") {
-                        Polymer.dom(this).firstElementChild.resize(value, origin);
+                        this.style.top = (parseFloat(this.style.top) + value) + "px";
                     } else if (origin === "bottom") {
-                        Polymer.dom(this).lastElementChild.resize(value, origin);
+                        this.style.bottom = (parseFloat(this.style.bottom) + value) + "px";
+                    } else if (origin === "right") {
+                        this.style.right = (parseFloat(this.style.right) + value) + "px";
+                        Polymer.dom(this).childNodes.forEach(function (child) {
+                            console.log("resize children");
+                            if (child !== Polymer.dom(this).lastElementChild) {
+                                child.resize(value, origin);
+                            }
+                        }.bind(this));
+                    } else if (origin === "left") {
+                        this.style.left = (parseFloat(this.style.left) + value) + "px";
+                        Polymer.dom(this).childNodes.forEach(function (child) {
+                            if (child !== Polymer.dom(this).firstElementChild) {
+                                child.resize(value, origin);
+                            }
+                        }.bind(this));
                     }
                 } else {
                     if (origin === "right") {
-                        Polymer.dom(this).firstElementChild.resize(value, origin);
+                        this.style.right = (parseFloat(this.style.right) + value) + "px";
                     } else if (origin === "left") {
-                        Polymer.dom(this).lastElementChild.resize(value, origin);
+                        this.style.left = (parseFloat(this.style.left) + value) + "px";
+                    } else if (origin === "top") {
+                        this.style.top = (parseFloat(this.style.top) + value) + "px";
+                        Polymer.dom(this).childNodes.forEach(function (child) {
+                            if (child !== Polymer.dom(this).firstElementChild) {
+                                child.resize(value, origin);
+                            }
+                        }.bind(this));
+                    } else if (origin === "bottom") {
+                        this.style.bottom = (parseFloat(this.style.bottom) + value) + "px";
+                        Polymer.dom(this).childNodes.forEach(function (child) {
+                            if (child !== Polymer.dom(this).lastElementChild) {
+                                child.resize(value, origin);
+                            }
+                        }.bind(this));
                     }
                 }
-                Polymer.dom(this).childNodes.forEach(function(child) {
-                    if (!(child instanceof DudeLayoutSeparator)) {
-                        child.resize(value, origin);
-                    }
-                });
             }
         });
     </script>
