@@ -2,6 +2,7 @@
 Copyright (c) 2015 DudeTeam. All rights reserved.
 -->
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="dude-layout-resizable.html">
 
 <!--
 `dude-layout-separator`
@@ -14,8 +15,6 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
         :host {
             position: absolute;
             cursor: row-resize;
-
-            background-color: green;
 
             @apply(--dude-layout-separator);
         }
@@ -63,6 +62,8 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 down: "preventSelection"
             },
 
+            behaviors: [DudeLayoutResizable],
+
             /**
              * DudeLayoutSeparator constructor.
              *
@@ -87,33 +88,15 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 var value = e.detail[(this.horizontal) ? "ddx" : "ddy"];
                 var previousOrigin = (this.horizontal) ? "right" : "bottom";
                 var nextOrigin = (this.horizontal) ? "left" : "top";
-                if (this.previousElementSibling.isResizable(-value, previousOrigin) && this.nextElementSibling.isResizable(value, nextOrigin)) {
+                if (this.previousElementSibling.isResizable(-value, previousOrigin) &&
+                        this.nextElementSibling.isResizable(value, nextOrigin)) {
                     this.previousElementSibling.resize(-value, previousOrigin);
                     this.nextElementSibling.resize(value, nextOrigin);
                     if (this.horizontal) {
-                        this.style.right = (parseFloat(this.style.right) + -value) + "px";
-                        this.style.left = (parseFloat(this.style.left) + value) + "px";
+                        this._resize(0, 0, -value, value);
                     } else {
-                        this.style.top = (parseFloat(this.style.top) + value) + "px";
-                        this.style.bottom = (parseFloat(this.style.bottom) + -value) + "px";
+                        this._resize(value, -value, 0, 0);
                     }
-                }
-            },
-
-            resize: function (value, origin) {
-                switch (origin) {
-                    case "top":
-                        this.style.top = (parseFloat(this.style.top) + value) + "px";
-                        break;
-                    case "bottom":
-                        this.style.bottom = (parseFloat(this.style.bottom) + value) + "px";
-                        break;
-                    case "right":
-                        this.style.right = (parseFloat(this.style.right) + value) + "px";
-                        break;
-                    case "left":
-                        this.style.left = (parseFloat(this.style.left) + value) + "px";
-                        break;
                 }
             },
 

@@ -4,6 +4,7 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="dude-layout-tabs.html">
 <link rel="import" href="dude-layout-pages.html">
+<link rel="import" href="dude-layout-resizable.html">
 
 <!--
 `dude-layout-block`
@@ -87,6 +88,8 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 
             },
 
+            behaviors: [DudeLayoutResizable],
+
             /**
              * DudeLayoutBlock constructor.
              * It will load automatically load the config given.
@@ -161,23 +164,6 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                     return false;
                 }
                 return true;
-            },
-
-            resize: function (value, origin) {
-                switch (origin) {
-                    case "top":
-                        this.style.top = (parseFloat(this.style.top) + value) + "px";
-                        break;
-                    case "bottom":
-                        this.style.bottom = (parseFloat(this.style.bottom) + value) + "px";
-                        break;
-                    case "right":
-                        this.style.right = (parseFloat(this.style.right) + value) + "px";
-                        break;
-                    case "left":
-                        this.style.left = (parseFloat(this.style.left) + value) + "px";
-                        break;
-                }
             }
         });
     </script>

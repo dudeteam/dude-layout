@@ -4,6 +4,7 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="dude-layout-separator.html">
 <link rel="import" href="dude-layout-block.html">
+<link rel="import" href="dude-layout-resizable.html">
 
 <!--
 `dude-layout-dock`
@@ -73,6 +74,8 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 }
 
             },
+
+            behaviors: [DudeLayoutResizable],
 
             /**
              * DudeLayoutDock constructor.
@@ -294,48 +297,26 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
              * @param value {Number} The resize delta in pixel
              * @param origin {String} The direction from which the resize comes from
              */
-            resize: function (value, origin) {
-                if (this.horizontal) {
-                    if (origin === "top") {
-                        this.style.top = (parseFloat(this.style.top) + value) + "px";
-                    } else if (origin === "bottom") {
-                        this.style.bottom = (parseFloat(this.style.bottom) + value) + "px";
-                    } else if (origin === "right") {
-                        this.style.right = (parseFloat(this.style.right) + value) + "px";
-                        Polymer.dom(this).childNodes.forEach(function (child) {
-                            console.log("resize children");
-                            if (child !== Polymer.dom(this).lastElementChild) {
-                                child.resize(value, origin);
-                            }
-                        }.bind(this));
-                    } else if (origin === "left") {
-                        this.style.left = (parseFloat(this.style.left) + value) + "px";
-                        Polymer.dom(this).childNodes.forEach(function (child) {
-                            if (child !== Polymer.dom(this).firstElementChild) {
-                                child.resize(value, origin);
-                            }
-                        }.bind(this));
-                    }
+            extendResize: function (value, origin) {
+                if ((this.horizontal && (origin === "right" || origin === "left")) || (!this.horizontal && (origin === "top" || origin === "bottom"))) {
+                    var nbElements = ((Polymer.dom(this).childNodes.length / 2) | 0) + 1;
+                    var partialValue = value / nbElements;
+                    Polymer.dom(this).childNodes.forEach(function (child) {
+                        if (this.horizontal) {
+                            child._resize(0, 0, -partialValue, -partialValue);
+                        } else {
+                            child._resize(-partialValue, -partialValue, 0, 0);
+                        }
+                        if (child instanceof DudeLayoutDock) {
+                            child.extendResize(partialValue, origin);
+                        }
+                    }.bind(this));
                 } else {
-                    if (origin === "right") {
-                        this.style.right = (parseFloat(this.style.right) + value) + "px";
-                    } else if (origin === "left") {
-                        this.style.left = (parseFloat(this.style.left) + value) + "px";
-                    } else if (origin === "top") {
-                        this.style.top = (parseFloat(this.style.top) + value) + "px";
-                        Polymer.dom(this).childNodes.forEach(function (child) {
-                            if (child !== Polymer.dom(this).firstElementChild) {
-                                child.resize(value, origin);
-                            }
-                        }.bind(this));
-                    } else if (origin === "bottom") {
-                        this.style.bottom = (parseFloat(this.style.bottom) + value) + "px";
-                        Polymer.dom(this).childNodes.forEach(function (child) {
-                            if (child !== Polymer.dom(this).lastElementChild) {
-                                child.resize(value, origin);
-                            }
-                        }.bind(this));
-                    }
+                    Polymer.dom(this).childNodes.forEach(function (child) {
+                        if (child instanceof DudeLayoutDock) {
+                            child.extendResize(value, origin);
+                        }
+                    });
                 }
             }
         });

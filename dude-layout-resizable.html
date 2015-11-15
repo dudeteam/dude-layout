@@ -1,0 +1,59 @@
+<!--
+Copyright (c) 2015 DudeTeam. All rights reserved.
+-->
+
+<!--
+`dude-layout-resizable`
+@group dude-layout
+@behavior dude-layout-resizable
+-->
+<script>
+    DudeLayoutResizable = {
+        resize: function (value, origin) {
+            switch (origin) {
+                case "top":
+                    this._resize(value, 0, 0, 0);
+                    break;
+                case "bottom":
+                    this._resize(0, value, 0, 0);
+                    break;
+                case "right":
+                    this._resize(0, 0, value, 0);
+                    break;
+                case "left":
+                    this._resize(0, 0, 0, value);
+                    break;
+            }
+            this.extendResize(value, origin);
+        },
+
+        extendResize: function (value, origin) {},
+
+        _resize: function(_top, _bottom, _right, _left) {
+            if (_top !== 0) {
+                var top = parseFloat(this.style.top);
+                if (top !== 0) {
+                    this.style.top = (top + _top) + "px";
+                }
+            }
+            if (_bottom !== 0) {
+                var bottom = parseFloat(this.style.bottom);
+                if (bottom !== 0) {
+                    this.style.bottom = (bottom + _bottom) + "px";
+                }
+            }
+            if (_right !== 0) {
+                var right = parseFloat(this.style.right);
+                if (right !== 0) {
+                    this.style.right = (right + _right) + "px";
+                }
+            }
+            if (_left !== 0) {
+                var left = parseFloat(this.style.left);
+                if (left !== 0) {
+                    this.style.left = (left + _left) + "px";
+                }
+            }
+        }
+    };
+</script>
