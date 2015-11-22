@@ -65,6 +65,26 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
                 },
 
                 /**
+                 * The maximal height supported by this block.
+                 *
+                 * @type {Number}
+                 */
+                minWidth: {
+                    type: Number,
+                    value: 100
+                },
+
+                /**
+                 * The minimal height supported by this block.
+                 *
+                 * @type {Number}
+                 */
+                minHeight: {
+                    type: Number,
+                    value: 100
+                },
+
+                /**
                  * Contains all children elements of the block.
                  *
                  * @private
@@ -158,9 +178,9 @@ Copyright (c) 2015 DudeTeam. All rights reserved.
             },
 
             isResizable: function (value, origin) {
-                if ((origin === "top" || origin === "bottom") && this.offsetHeight < value) {
+                if ((origin === "top" || origin === "bottom") && this.offsetHeight - this.minHeight < value) {
                     return false;
-                } else if ((origin === "right" || origin === "left") && this.offsetWidth < value) {
+                } else if ((origin === "right" || origin === "left") && this.offsetWidth - this.minWidth < value) {
                     return false;
                 }
                 return true;
